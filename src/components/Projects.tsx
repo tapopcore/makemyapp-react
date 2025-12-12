@@ -7,15 +7,6 @@ import akutee from "./assets/web/akutee.png"
 import athlab from "./assets/web/athlab.png"
 import chapterskeen from "./assets/web/chapterskeen.png"
 import fleurons from "./assets/web/fleurons.png"
-import funkvibe from "./assets/web/funkvibes.png"
-import gaffit from "./assets/web/gaffit.png"
-import gossipconfetti from "./assets/web/Gossipconfetti.png"
-import heatronics from "./assets/web/heatronics.png"
-import kyxaindia from "./assets/web/kyzaindia.png"
-import laadindia from "./assets/web/laadindia.png"
-import littlethingstudio from "./assets/web/littlethingstudio.png"
-import meethielaichi from "./assets/web/Meethielaiechi.png"
-import Regaplus from "./assets/web/Regaplus.png"
 
 import ReactGA from "react-ga4";
 const Projects: React.FC = () => {
