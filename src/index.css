@@ -1,1 +1,80 @@
 @import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/hanken-grotesk";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+@theme {
+  --color-paper: #f3efe6;
+  --color-paper-2: #ebe5d8;
+  --color-ink: #121212;
+  --color-ink-2: #3b3a36;
+  --color-mute: #6e6a60;
+  --color-violet: #5d00ff;
+  --color-violet-2: #7a33ff;
+  --color-lilac: #e6dcff;
+  --color-blaze: #ff6b00;
+  --color-peach: #ffe2cc;
+
+  --font-display: "Bricolage Grotesque Variable", "Hanken Grotesk Variable", system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-rev: marquee-rev 46s linear infinite;
+}
+
+@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes marquee-rev { from { transform: translateX(-50%) } to { transform: translateX(0) } }
+@keyframes rise { from { opacity: 0; transform: translateY(24px) } to { opacity: 1; transform: none } }
+@keyframes spin-slow { to { transform: rotate(360deg) } }
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+::selection { background: var(--color-blaze); color: var(--color-ink); }
+
+/* paper grain */
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .07; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@utility wrap { margin-inline: auto; width: 100%; max-width: 1320px; padding-inline: 1rem; @media (width >= 40rem) { padding-inline: 1.5rem; } @media (width >= 64rem) { padding-inline: 2.5rem; } }
+@utility display { font-family: var(--font-display); font-variation-settings: "opsz" 96, "wdth" 100; letter-spacing: -0.035em; line-height: .92; font-weight: 800; }
+@utility label { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
+
+@utility btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 9999px; padding: .875rem 1.5rem; font-size: 15px; font-weight: 600; transition: all .2s; }
+@utility btn-ink { @apply btn bg-ink text-paper hover:bg-violet; }
+@utility btn-blaze { @apply btn bg-blaze text-ink hover:bg-paper; }
+@utility btn-line { @apply btn border border-ink text-ink hover:bg-ink hover:text-paper; }
+@utility btn-paper { @apply btn bg-paper text-ink hover:bg-blaze; }
+@utility chip { display: inline-flex; align-items: center; border-radius: 9999px; border: 1px solid color-mix(in oklab, var(--color-ink) 25%, transparent); padding: .25rem .75rem; font-size: 12px; font-weight: 500; }
+
+@utility underline-swipe { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; transition: background-size .3s; &:hover { background-size: 100% 1.5px; } }
+
+@utility browser { overflow: hidden; border-radius: .75rem; border: 1px solid var(--color-ink); background: white; box-shadow: 6px 6px 0 0 var(--color-ink); }
+@utility browser-bar { display: flex; align-items: center; gap: .375rem; border-bottom: 1px solid var(--color-ink); background: var(--color-paper-2); padding: .5rem .75rem;
+  & i { display: block; width: .625rem; height: .625rem; border-radius: 9999px; border: 1px solid color-mix(in oklab, var(--color-ink) 50%, transparent); } }
+
+.reveal { opacity: 0; }
+.reveal.in { animation: rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
+.hero-in > * { opacity: 0; animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
+.hero-in > *:nth-child(1) { animation-delay: .05s }
+.hero-in > *:nth-child(2) { animation-delay: .15s }
+.hero-in > *:nth-child(3) { animation-delay: .28s }
+.hero-in > *:nth-child(4) { animation-delay: .4s }
+.hero-in > *:nth-child(5) { animation-delay: .52s }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal, .hero-in > * { opacity: 1 !important; }
+}
+/* Without JS (crawlers, previews) everything stays visible */
+.no-js .reveal { opacity: 1; }

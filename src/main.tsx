@@ -1,10 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { StrictMode } from "react";
+import { createRoot, hydrateRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import ReactGA from "react-ga4";
+import "./index.css";
+import App from "./App";
 
-createRoot(document.getElementById('root')!).render(
+document.documentElement.classList.remove("no-js");
+ReactGA.initialize("G-9YYJP2Q07L");
+
+const root = document.getElementById("root")!;
+const app = (
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
+
+if (root.hasChildNodes()) hydrateRoot(root, app);
+else createRoot(root).render(app);

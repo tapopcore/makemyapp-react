@@ -1,8 +1,15 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/projects", "destination": "/work", "permanent": true },
+    { "source": "/Services", "destination": "/services", "permanent": true },
+    { "source": "/Contact", "destination": "/contact", "permanent": true },
+    { "source": "/About", "destination": "/about", "permanent": true },
+    { "source": "/home", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/img/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000" }] }
   ]
 }

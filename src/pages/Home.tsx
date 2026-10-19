@@ -1,0 +1,230 @@
+import { Link } from "react-router-dom";
+import { AWARDS, FAQS, FEATURED, MORE_WORK, PILLARS, PRINCIPLES, PROCESS, SERVICES, SITE, TESTIMONIALS, inr } from "../content";
+import { Arrow, ArrowUR, BrowserShot, CtaBand, Faq, Reveal, SectionHead, track } from "../ui";
+
+const names = [...FEATURED, ...MORE_WORK].filter(w => w.type !== "Content").map(w => w.name);
+const rowA = names.slice(0, Math.ceil(names.length / 2));
+const rowB = names.slice(Math.ceil(names.length / 2));
+
+function Marquee({ items, reverse = false }: { items: string[]; reverse?: boolean }) {
+  const list = [...items, ...items];
+  return (
+    <div className="flex overflow-hidden">
+      <ul className={`flex shrink-0 items-center gap-10 pr-10 ${reverse ? "animate-marquee-rev" : "animate-marquee"}`} aria-hidden={reverse}>
+        {list.map((n, i) => (
+          <li key={i} className="display flex items-center gap-10 whitespace-nowrap text-[clamp(28px,4vw,52px)] tracking-[-0.03em]">
+            {n}<span className="inline-block size-3 rotate-45 bg-blaze" aria-hidden />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function AwardSeal() {
+  return (
+    <div className="relative grid size-[132px] place-items-center rounded-full bg-blaze text-ink shadow-[4px_4px_0_0_var(--color-ink)] border border-ink">
+      <svg viewBox="0 0 120 120" className="absolute inset-0 size-full" style={{ animation: "spin-slow 22s linear infinite" }} aria-hidden>
+        <defs><path id="c" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" /></defs>
+        <text className="font-mono" fontSize="9.6" letterSpacing="2.2" fill="currentColor"><textPath href="#c">TECH STARTUP OF THE YEAR • 2023 • AWARD WINNING •</textPath></text>
+      </svg>
+      <span className="display text-[34px]">★</span>
+    </div>
+  );
+}
+
+export default function Home() {
+  const lowest = (p: string) => Math.min(...SERVICES.filter(s => s.pillar === p).map(s => s.price));
+  return (
+    <>
+      {/* HERO */}
+      <section className="relative overflow-hidden pt-32 sm:pt-40">
+        <div className="wrap grid gap-14 pb-16 lg:grid-cols-12 lg:gap-8 lg:pb-24">
+          <div className="hero-in lg:col-span-7">
+            <p className="label flex items-center gap-2 text-mute"><span className="inline-block size-2 rounded-full bg-[#25D366]" />Full-stack agency in Delhi. Taking new projects.</p>
+            <h1 className="display mt-6 text-[clamp(60px,10.4vw,156px)]">
+              Build it.<br /><span className="text-violet">Brand it.</span><br /><span className="relative inline-block">Grow it.<svg viewBox="0 0 300 20" className="absolute -bottom-2 left-0 h-4 w-full text-blaze" preserveAspectRatio="none" aria-hidden><path d="M2 14 C 80 2, 200 2, 298 12" stroke="currentColor" strokeWidth="6" fill="none" strokeLinecap="round" /></svg></span>
+            </h1>
+            <p className="mt-9 max-w-[560px] text-[19px] leading-relaxed text-ink-2">
+              One team for your website, Shopify store, app, brand, ads and AI automation. 50+ projects shipped for Indian brands, with real prices up front and no upselling.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a href={SITE.calendly} target="_blank" rel="noopener" onClick={() => track("book_call", "hero")} className="btn-ink">Book a free 30 min call <Arrow /></a>
+              <Link to="/work" className="btn-line">See our work</Link>
+            </div>
+            <div className="mt-10 flex items-center gap-4 text-sm text-mute">
+              <div className="flex -space-x-2">
+                {["dhruv", "sayaji", "ramprasad"].map(n => <img key={n} src={`/img/team/${n}.webp`} alt="" width={36} height={36} className="size-9 rounded-full border-2 border-paper object-cover" />)}
+              </div>
+              <p>Free call. Honest advice. No sales pitch.</p>
+            </div>
+          </div>
+
+          <div className="relative min-h-[360px] sm:min-h-[460px] lg:col-span-5 lg:min-h-0" aria-label="Recent work">
+            <div className="hero-in relative h-full">
+              <div className="absolute left-0 top-0 w-[82%] -rotate-[3deg] lg:w-[92%]"><BrowserShot img="athlab" name="athlab.in" priority sizes="(min-width:1024px) 40vw, 80vw" /></div>
+              <div className="absolute right-0 top-[34%] w-[76%] rotate-[2.5deg] lg:w-[84%]"><BrowserShot img="gossipconfetti" name="gossipconfetti.com" priority sizes="(min-width:1024px) 36vw, 76vw" /></div>
+              <div className="absolute bottom-0 left-[6%] w-[66%] -rotate-[1deg] lg:bottom-[-4%] lg:w-[72%]"><BrowserShot img="dma" name="dmassociates.in" sizes="(min-width:1024px) 30vw, 66vw" /></div>
+              <div className="absolute -right-1 -top-4 z-10 sm:right-2 lg:-right-4 lg:-top-8"><AwardSeal /></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MARQUEE */}
+      <section aria-label="Brands we've worked with" className="border-y border-ink bg-ink py-7 text-paper">
+        <p className="sr-only">Brands we've worked with: {names.join(", ")}</p>
+        <div className="space-y-3"><Marquee items={rowA} /><div className="text-paper/45"><Marquee items={rowB} reverse /></div></div>
+      </section>
+
+      {/* NUMBERS */}
+      <section className="wrap grid grid-cols-2 border-b border-ink lg:grid-cols-4">
+        {[["50+", "projects shipped"], ["20+", "Shopify stores built"], ["19", "services, one team"], ["2", "startup awards, 2023"]].map(([n, l], i) => (
+          <Reveal key={l} delay={i * 80} className={`py-10 sm:py-14 ${i % 2 ? "pl-5 sm:pl-8" : "pr-5"} ${i > 0 ? "lg:border-l lg:border-ink lg:pl-8" : ""} ${i % 2 ? "border-l border-ink lg:border-l" : ""} ${i > 1 ? "border-t border-ink lg:border-t-0" : ""}`}>
+            <p className="display text-[clamp(52px,7vw,96px)]">{n}</p>
+            <p className="label mt-2 text-mute">{l}</p>
+          </Reveal>
+        ))}
+      </section>
+
+      {/* SERVICES */}
+      <section className="wrap py-24 sm:py-32">
+        <SectionHead kicker="What we do" title={<>Four things,<br />done properly.</>}>
+          Most agencies do one part and hand you off. We cover the whole journey, so your brand, store and ads actually work together.
+        </SectionHead>
+        <div className="mt-16 border-t border-ink">
+          {PILLARS.map((p, i) => {
+            const list = SERVICES.filter(s => s.pillar === p.name);
+            return (
+              <Reveal key={p.name} as="article">
+                <Link to="/services" className="group grid gap-4 border-b border-ink py-8 transition-colors hover:bg-ink hover:text-paper sm:py-10 lg:grid-cols-12 lg:items-center lg:px-4">
+                  <span className="label text-mute group-hover:text-paper/60 lg:col-span-1">0{i + 1}</span>
+                  <h3 className="display text-[clamp(44px,5.4vw,78px)] lg:col-span-4 lg:whitespace-nowrap">{p.name === "Content & AI" ? <>Content<span className="text-blaze">+</span>AI</> : p.name}</h3>
+                  <div className="lg:col-span-5">
+                    <p className="text-[17px] text-ink-2 group-hover:text-paper/80">{p.line}</p>
+                    <ul className="mt-3 flex flex-wrap gap-2">{list.map(s => <li key={s.name} className="chip group-hover:border-paper/30">{s.name}</li>)}</ul>
+                  </div>
+                  <div className="flex items-center justify-between lg:col-span-2 lg:justify-end lg:gap-4">
+                    <span className="font-mono text-sm">from {inr(lowest(p.name))}</span>
+                    <span className="grid size-11 place-items-center rounded-full border border-current transition-transform group-hover:-rotate-45"><Arrow /></span>
+                  </div>
+                </Link>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* WORK */}
+      <section className="bg-paper-2 py-24 sm:py-32">
+        <div className="wrap">
+          <SectionHead kicker="Selected work" title={<>Live, selling,<br />and real.</>}>
+            Every project here is live right now. Click through and judge for yourself.
+          </SectionHead>
+          <div className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-2">
+            {FEATURED.slice(0, 6).map((w, i) => (
+              <Reveal key={w.name} delay={(i % 2) * 120} className={i % 2 ? "md:mt-20" : ""}>
+                <a href={w.url} target="_blank" rel="noopener" className="group block">
+                  <BrowserShot img={w.img!} name={w.url.replace(/https?:\/\/(www\.)?/, "").replace(/\/$/, "")} />
+                  <div className="mt-5 flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="display text-[34px] tracking-[-0.03em]">{w.name}</h3>
+                      <p className="mt-1 text-[16px] text-ink-2">{w.line}</p>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-2">
+                      <span className="chip bg-paper">{w.type}</span>
+                      <span className="label text-mute">{w.sector}</span>
+                    </div>
+                  </div>
+                </a>
+              </Reveal>
+            ))}
+          </div>
+          <div className="mt-16 flex justify-center"><Link to="/work" className="btn-ink">See all 50+ projects <Arrow /></Link></div>
+        </div>
+      </section>
+
+      {/* PRINCIPLES */}
+      <section className="wrap py-24 sm:py-32">
+        <SectionHead kicker="How we work" title={<>We'd rather lose a sale than <span className="text-violet">oversell</span> you.</>}>
+          It sounds odd for an agency. It's also why clients keep coming back and sending their friends.
+        </SectionHead>
+        <div className="mt-16 grid gap-px overflow-hidden rounded-[22px] border border-ink bg-ink sm:grid-cols-2 lg:grid-cols-3">
+          {PRINCIPLES.map((p, i) => (
+            <Reveal key={p.title} delay={(i % 3) * 90} className={`p-8 sm:p-10 ${i === 0 ? "bg-blaze" : "bg-paper"}`}>
+              <span className="label text-ink/50">0{i + 1}</span>
+              <h3 className="display mt-6 text-[30px] tracking-[-0.03em]">{p.title}</h3>
+              <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{p.body}</p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="bg-ink py-24 text-paper sm:py-32">
+        <div className="wrap">
+          <SectionHead light kicker="Client words" title={<>Don't take<br />our word for it.</>} />
+          <Reveal className="mt-16 grid gap-10 lg:grid-cols-12">
+            <figure className="lg:col-span-8">
+              <span className="display block text-[120px] leading-[.6] text-blaze" aria-hidden>“</span>
+              <blockquote className="display mt-4 text-[clamp(28px,3.4vw,46px)] leading-[1.12] tracking-[-0.025em]">{TESTIMONIALS[1].quote}</blockquote>
+              <figcaption className="mt-8 flex items-center gap-3 text-paper/70"><span className="h-px w-10 bg-paper/40" /><span><b className="text-paper">{TESTIMONIALS[1].name}</b>, {TESTIMONIALS[1].role}</span></figcaption>
+            </figure>
+          </Reveal>
+          <div className="mt-16 -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+            {TESTIMONIALS.filter((_, i) => i !== 1).map(t => (
+              <figure key={t.name} className="flex w-[82vw] shrink-0 snap-start flex-col justify-between rounded-[20px] border border-paper/20 p-7 sm:w-auto">
+                <blockquote className="text-[16px] leading-relaxed text-paper/85">“{t.quote}”</blockquote>
+                <figcaption className="mt-6 border-t border-paper/15 pt-4 text-sm"><b>{t.name}</b><br /><span className="text-paper/55">{t.role}</span></figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROCESS */}
+      <section className="wrap py-24 sm:py-32">
+        <SectionHead kicker="The process" title={<>No surprises.<br />Six clear steps.</>}>
+          You'll always know what's happening, what's next and what it costs. Payments are tied to milestones, not promises.
+        </SectionHead>
+        <ol className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {PROCESS.map((p, i) => (
+            <Reveal as="li" key={p.step} delay={(i % 3) * 90} className="rounded-[20px] border border-ink p-8">
+              <span className="display text-[64px] text-violet">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="display mt-4 text-[28px] tracking-[-0.03em]">{p.step}</h3>
+              <p className="mt-2 text-[16px] leading-relaxed text-ink-2">{p.body}</p>
+            </Reveal>
+          ))}
+        </ol>
+      </section>
+
+      {/* AWARDS */}
+      <section className="border-y border-ink bg-lilac">
+        <div className="wrap grid gap-10 py-16 lg:grid-cols-12 lg:items-center">
+          <p className="display text-[clamp(36px,4.6vw,64px)] lg:col-span-5">Recognised for what we build.</p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-7">
+            {AWARDS.map(a => (
+              <Reveal key={a.title} className="rounded-[18px] border border-ink bg-paper p-6">
+                <span className="label text-mute">{a.year}</span>
+                <p className="display mt-3 text-[26px] leading-tight tracking-[-0.02em]">{a.title}</p>
+                <p className="mt-2 text-sm text-ink-2">{a.event}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="wrap grid gap-12 py-24 sm:py-32 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <p className="label text-mute">FAQ</p>
+          <h2 className="display mt-4 text-[clamp(40px,5vw,72px)]">Fair questions.</h2>
+          <Link to="/contact" className="mt-6 inline-flex items-center gap-2 font-semibold underline-swipe">Ask us anything else <ArrowUR /></Link>
+        </div>
+        <div className="lg:col-span-8"><Faq items={FAQS} /></div>
+      </section>
+
+      <CtaBand />
+    </>
+  );
+}

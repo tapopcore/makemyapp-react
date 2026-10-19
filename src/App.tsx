@@ -1,31 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./components/Homepage";
-import About from "./components/About";
-import Services from "./components/Services";
-import Projects from "./components/Projects";
-import ContactUS from "./components/ContactUs";
-import ReactGA from "react-ga4";
-import { useEffect } from "react";
-import PrivacyPolicy from "./components/PrivacyPolicy";
-function App() {
-  ReactGA.initialize("G-9YYJP2Q07L");
-  useEffect(() => {
-    ReactGA.send({ hitType: "pageview", page: window.location.pathname });
-  }, []);
+import { Route, Routes } from "react-router-dom";
+import { Layout } from "./ui";
+import Home from "./pages/Home";
+import Services from "./pages/Services";
+import ServiceDetail from "./pages/ServiceDetail";
+import Work from "./pages/Work";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
+import NotFound from "./pages/NotFound";
+
+export default function App() {
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/contact" element={<ContactUS />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        </Routes>
-      </Router>
-    </>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/services/:slug" element={<ServiceDetail />} />
+        <Route path="/work" element={<Work />} />
+        <Route path="/projects" element={<Work />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Layout>
   );
 }
-
-export default App;
