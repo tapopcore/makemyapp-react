@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { AWARDS, FAQS, FEATURED, MORE_WORK, PRINCIPLES, PROCESS, SITE, TESTIMONIALS } from "../content";
+import { AWARDS, FAQS, FEATURED, MORE_WORK, SITE, TESTIMONIALS } from "../content";
+import { Principles, ProcessSteps } from "../sections";
 import { BrandMarquee, HeroBadge, TileGrid, Typewriter } from "../fx";
 import { PillarBento } from "../pillars";
 import { Arrow, ArrowUR, BrowserShot, CtaBand, Faq, Reveal, SectionHead, track } from "../ui";
@@ -117,15 +118,7 @@ export default function Home() {
         <SectionHead kicker="How we work" title={<>We'd rather lose a sale than <span className="text-violet">oversell</span> you.</>}>
           It sounds odd for an agency. It's also why clients keep coming back and sending their friends.
         </SectionHead>
-        <div className="mt-16 grid gap-px overflow-hidden rounded-[22px] border border-ink bg-ink sm:grid-cols-2 lg:grid-cols-3">
-          {PRINCIPLES.map((p, i) => (
-            <Reveal key={p.title} delay={(i % 3) * 90} className={`p-8 sm:p-10 ${i === 0 ? "bg-blaze" : "bg-paper"}`}>
-              <span className="label text-ink/50">0{i + 1}</span>
-              <h3 className="display mt-6 text-[30px] tracking-[-0.03em]">{p.title}</h3>
-              <p className="mt-3 text-[16px] leading-relaxed text-ink-2">{p.body}</p>
-            </Reveal>
-          ))}
-        </div>
+        <Principles />
       </section>
 
       {/* TESTIMONIALS */}
@@ -155,15 +148,7 @@ export default function Home() {
         <SectionHead kicker="The process" title={<>No surprises.<br />Six clear steps.</>}>
           You'll always know what's happening, what's next and what it costs. Payments are tied to milestones, not promises.
         </SectionHead>
-        <ol className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {PROCESS.map((p, i) => (
-            <Reveal as="li" key={p.step} delay={(i % 3) * 90} className="rounded-[20px] border border-ink p-8">
-              <span className="display text-[64px] text-violet">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="display mt-4 text-[28px] tracking-[-0.03em]">{p.step}</h3>
-              <p className="mt-2 text-[16px] leading-relaxed text-ink-2">{p.body}</p>
-            </Reveal>
-          ))}
-        </ol>
+        <ProcessSteps />
       </section>
 
       {/* AWARDS */}
