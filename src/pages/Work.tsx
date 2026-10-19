@@ -9,12 +9,11 @@ export default function Work() {
   const [f, setF] = useState<(typeof FILTERS)[number]>("All");
   const shots = FEATURED.filter(w => f === "All" || w.type === f);
   const rest = MORE_WORK.filter(w => f === "All" || w.type === f);
-  const count = (t: (typeof FILTERS)[number]) => [...FEATURED, ...MORE_WORK].filter(w => t === "All" || w.type === t).length;
 
   return (
     <>
-      <PageHero kicker="Our work" title={<>All live.<br />All real.</>}>
-        Websites, Shopify stores, apps and content for brands across India. Every link below goes to the live product, not a mockup.
+      <PageHero kicker="Selected work" title={<>300+ projects.<br /><span className="text-violet">A few we can show.</span></>}>
+        Most of what we build sits behind NDAs, so this is a selection of public work: websites, Shopify stores, apps and content for brands across India. Every link goes to the live product, not a mockup.
       </PageHero>
 
       <div className="sticky top-[68px] z-30 border-y border-ink bg-paper/90 backdrop-blur-md">
@@ -22,7 +21,7 @@ export default function Work() {
           {FILTERS.map(t => (
             <button key={t} role="tab" aria-selected={f === t} onClick={() => setF(t)}
               className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${f === t ? "border-ink bg-ink text-paper" : "border-ink/25 hover:border-ink"}`}>
-              {t} <span className="ml-1 font-mono text-[11px] opacity-60">{count(t)}</span>
+              {t}
             </button>
           ))}
         </div>

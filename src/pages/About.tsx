@@ -15,7 +15,7 @@ export default function About() {
             </p>
             <p>We'd been on the other side of that table. Before MakeMyApp, we built and scaled our own products, including Qviq, a website platform paired with NFC smart cards. We learnt what actually moves a business forward, and what's just noise.</p>
             <p>So we built the agency we wished we could hire. One in-house team of designers, developers and marketers in Delhi, working on your brand, your store, your app and your ads together. Prices up front. Honest advice, even when it means a smaller invoice.</p>
-            <p>That's taken us to 50+ live projects for brands like Athlab, Deciwood, DM Associates, Wedhaven and Shararat, and two startup awards along the way.</p>
+            <p>That's taken us past 300 projects for brands like Athlab, Deciwood, DM Associates, Wedhaven and Shararat, and two startup awards along the way. Most of that work is under NDA, so you'll only see a slice of it here.</p>
           </div>
         </Reveal>
         <Reveal delay={150} className="lg:col-span-5">

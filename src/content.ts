@@ -262,7 +262,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     short: "Shopify stores",
     title: "Shopify Store Development in Delhi",
     h1: "Shopify stores that are ready to sell.",
-    intro: "We've built 20+ Shopify stores for Indian D2C brands across fashion, beauty, nutrition, gifting and home. Fast, mobile-first stores with clean product pages and a checkout that doesn't leak customers.",
+    intro: "We build Shopify stores for Indian D2C brands across fashion, beauty, nutrition, gifting and home. Fast, mobile-first stores with clean product pages and a checkout that doesn't leak customers.",
     from: inr(34999),
     forWho: ["D2C brands launching their first store", "Brands moving off a slow or outdated theme", "Marketplace sellers who want their own channel", "Stores that get traffic but don't convert"],
     includes: ["Custom theme design matched to your brand", "Product, collection and catalogue setup", "Payments, shipping, COD and GST setup", "Apps for reviews, WhatsApp, upsells and subscriptions", "Speed and mobile optimisation", "SEO basics: titles, URLs, structured data", "Training so your team can run it", "Post-launch support"],
@@ -272,7 +272,7 @@ export const SERVICE_PAGES: ServicePage[] = [
       { q: "Can you redesign my existing Shopify store?", a: "Yes. We can redesign your theme, clean up apps that slow you down, and improve product pages without losing your orders, customers or SEO." },
       { q: "Do you also run ads for the store?", a: "Yes. We run Meta ads, influencer campaigns and email automation, so the same team that built your store can bring traffic to it." },
     ],
-    metaDescription: "Shopify store development for Indian D2C brands. 20+ stores built. Custom themes, payments, shipping and speed setup. Starting at ₹34,999.",
+    metaDescription: "Shopify store development for Indian D2C brands. Custom themes, payments, shipping and speed setup. Starting at ₹34,999.",
   },
   {
     slug: "website-development",
@@ -377,11 +377,11 @@ export interface PageMeta { title: string; description: string; }
 
 export const META: Record<string, PageMeta> = {
   "/": { title: "MakeMyApp | Websites, Shopify, Apps, Branding & Ads Agency in Delhi",
-    description: "Full-stack agency in Delhi. We build websites, Shopify stores and apps, design brands, run Meta ads and set up AI automation. 50+ projects shipped. Real starting prices." },
+    description: "Full-stack agency in Delhi. We build websites, Shopify stores and apps, design brands, run Meta ads and set up AI automation. 300+ projects delivered. Real starting prices." },
   "/services": { title: "Services & Starting Prices | MakeMyApp",
     description: "19 services with real starting prices: websites from ₹9,999, Shopify from ₹34,999, branding from ₹24,999, apps from ₹99,999, AI automation, ads and content." },
-  "/work": { title: "Our Work: 50+ Websites, Shopify Stores & Apps | MakeMyApp",
-    description: "Live websites, Shopify stores and apps built by MakeMyApp for Athlab, DM Associates, Gossip Confetti, Wedhaven, Deciwood and more." },
+  "/work": { title: "Our Work: Websites, Shopify Stores & Apps | MakeMyApp",
+    description: "Selected work from 300+ projects: websites, Shopify stores and apps built by MakeMyApp for Athlab, DM Associates, Gossip Confetti, Wedhaven, Deciwood and more." },
   "/about": { title: "About MakeMyApp | Founders, Team & Awards",
     description: "Meet the team behind MakeMyApp, the Delhi agency that also built Qviq. Tech Startup of the Year 2023, Bharat Ke Maharathi Awards." },
   "/contact": { title: "Contact MakeMyApp | Book a Free Call",

@@ -1,25 +1,11 @@
 import { Link } from "react-router-dom";
-import { AWARDS, FAQS, FEATURED, MORE_WORK, PILLARS, PRINCIPLES, PROCESS, SERVICES, SITE, TESTIMONIALS, inr } from "../content";
+import { AWARDS, FAQS, FEATURED, MORE_WORK, PRINCIPLES, PROCESS, SITE, TESTIMONIALS } from "../content";
+import { BrandMarquee, HeroBadge, TileGrid, Typewriter } from "../fx";
+import { PillarBento } from "../pillars";
 import { Arrow, ArrowUR, BrowserShot, CtaBand, Faq, Reveal, SectionHead, track } from "../ui";
 
 const names = [...FEATURED, ...MORE_WORK].filter(w => w.type !== "Content").map(w => w.name);
-const rowA = names.slice(0, Math.ceil(names.length / 2));
-const rowB = names.slice(Math.ceil(names.length / 2));
-
-function Marquee({ items, reverse = false }: { items: string[]; reverse?: boolean }) {
-  const list = [...items, ...items];
-  return (
-    <div className="flex overflow-hidden">
-      <ul className={`flex shrink-0 items-center gap-10 pr-10 ${reverse ? "animate-marquee-rev" : "animate-marquee"}`} aria-hidden={reverse}>
-        {list.map((n, i) => (
-          <li key={i} className="display flex items-center gap-10 whitespace-nowrap text-[clamp(28px,4vw,52px)] tracking-[-0.03em]">
-            {n}<span className="inline-block size-3 rotate-45 bg-blaze" aria-hidden />
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+const PHRASES = ["Shopify stores that sell.", "websites that convert.", "apps people actually use.", "brands people remember.", "ads that bring buyers.", "AI that replies 24x7."];
 
 function AwardSeal() {
   return (
@@ -34,19 +20,24 @@ function AwardSeal() {
 }
 
 export default function Home() {
-  const lowest = (p: string) => Math.min(...SERVICES.filter(s => s.pillar === p).map(s => s.price));
   return (
     <>
       {/* HERO */}
       <section className="relative overflow-hidden pt-32 sm:pt-40">
-        <div className="wrap grid gap-14 pb-16 lg:grid-cols-12 lg:gap-8 lg:pb-24">
+        <TileGrid />
+        <div aria-hidden className="pointer-events-none absolute -left-40 top-20 size-[520px] rounded-full bg-lilac/70 blur-[120px]" />
+        <div aria-hidden className="pointer-events-none absolute -right-20 top-60 size-[420px] rounded-full bg-peach/80 blur-[120px]" />
+        <div className="wrap relative grid gap-14 pb-16 lg:grid-cols-12 lg:gap-8 lg:pb-24">
           <div className="hero-in lg:col-span-7">
-            <p className="label flex items-center gap-2 text-mute"><span className="inline-block size-2 rounded-full bg-[#25D366]" />Full-stack agency in Delhi. Taking new projects.</p>
-            <h1 className="display mt-6 text-[clamp(60px,10.4vw,156px)]">
+            <HeroBadge />
+            <h1 className="display mt-7 text-[clamp(60px,10.4vw,156px)]">
               Build it.<br /><span className="text-violet">Brand it.</span><br /><span className="relative inline-block">Grow it.<svg viewBox="0 0 300 20" className="absolute -bottom-2 left-0 h-4 w-full text-blaze" preserveAspectRatio="none" aria-hidden><path d="M2 14 C 80 2, 200 2, 298 12" stroke="currentColor" strokeWidth="6" fill="none" strokeLinecap="round" /></svg></span>
             </h1>
-            <p className="mt-9 max-w-[560px] text-[19px] leading-relaxed text-ink-2">
-              One team for your website, Shopify store, app, brand, ads and AI automation. 50+ projects shipped for Indian brands, with real prices up front and no upselling.
+            <p className="display mt-8 min-h-[2.3em] text-[clamp(24px,2.6vw,36px)] leading-[1.15] tracking-[-0.025em] sm:min-h-[1.2em]">
+              We make <Typewriter phrases={PHRASES} className="text-violet" />
+            </p>
+            <p className="mt-5 max-w-[560px] text-[18px] leading-relaxed text-ink-2">
+              One full-stack team in Delhi for your website, Shopify store, app, brand, ads and AI automation. 300+ projects delivered, with real prices up front and no upselling.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <a href={SITE.calendly} target="_blank" rel="noopener" onClick={() => track("book_call", "hero")} className="btn-ink">Book a free 30 min call <Arrow /></a>
@@ -72,14 +63,11 @@ export default function Home() {
       </section>
 
       {/* MARQUEE */}
-      <section aria-label="Brands we've worked with" className="border-y border-ink bg-ink py-7 text-paper">
-        <p className="sr-only">Brands we've worked with: {names.join(", ")}</p>
-        <div className="space-y-3"><Marquee items={rowA} /><div className="text-paper/45"><Marquee items={rowB} reverse /></div></div>
-      </section>
+      <BrandMarquee names={names} />
 
       {/* NUMBERS */}
       <section className="wrap grid grid-cols-2 border-b border-ink lg:grid-cols-4">
-        {[["50+", "projects shipped"], ["20+", "Shopify stores built"], ["19", "services, one team"], ["2", "startup awards, 2023"]].map(([n, l], i) => (
+        {[["300+", "projects delivered"], ["19", "services, one team"], ["100%", "in-house team"], ["2", "startup awards, 2023"]].map(([n, l], i) => (
           <Reveal key={l} delay={i * 80} className={`py-10 sm:py-14 ${i % 2 ? "pl-5 sm:pl-8" : "pr-5"} ${i > 0 ? "lg:border-l lg:border-ink lg:pl-8" : ""} ${i % 2 ? "border-l border-ink lg:border-l" : ""} ${i > 1 ? "border-t border-ink lg:border-t-0" : ""}`}>
             <p className="display text-[clamp(52px,7vw,96px)]">{n}</p>
             <p className="label mt-2 text-mute">{l}</p>
@@ -92,34 +80,14 @@ export default function Home() {
         <SectionHead kicker="What we do" title={<>Four things,<br />done properly.</>}>
           Most agencies do one part and hand you off. We cover the whole journey, so your brand, store and ads actually work together.
         </SectionHead>
-        <div className="mt-16 border-t border-ink">
-          {PILLARS.map((p, i) => {
-            const list = SERVICES.filter(s => s.pillar === p.name);
-            return (
-              <Reveal key={p.name} as="article">
-                <Link to="/services" className="group grid gap-4 border-b border-ink py-8 transition-colors hover:bg-ink hover:text-paper sm:py-10 lg:grid-cols-12 lg:items-center lg:px-4">
-                  <span className="label text-mute group-hover:text-paper/60 lg:col-span-1">0{i + 1}</span>
-                  <h3 className="display text-[clamp(44px,5.4vw,78px)] lg:col-span-4 lg:whitespace-nowrap">{p.name === "Content & AI" ? <>Content<span className="text-blaze">+</span>AI</> : p.name}</h3>
-                  <div className="lg:col-span-5">
-                    <p className="text-[17px] text-ink-2 group-hover:text-paper/80">{p.line}</p>
-                    <ul className="mt-3 flex flex-wrap gap-2">{list.map(s => <li key={s.name} className="chip group-hover:border-paper/30">{s.name}</li>)}</ul>
-                  </div>
-                  <div className="flex items-center justify-between lg:col-span-2 lg:justify-end lg:gap-4">
-                    <span className="font-mono text-sm">from {inr(lowest(p.name))}</span>
-                    <span className="grid size-11 place-items-center rounded-full border border-current transition-transform group-hover:-rotate-45"><Arrow /></span>
-                  </div>
-                </Link>
-              </Reveal>
-            );
-          })}
-        </div>
+        <PillarBento />
       </section>
 
       {/* WORK */}
       <section className="bg-paper-2 py-24 sm:py-32">
         <div className="wrap">
           <SectionHead kicker="Selected work" title={<>Live, selling,<br />and real.</>}>
-            Every project here is live right now. Click through and judge for yourself.
+            A few public projects from 300+. Most of our work is under NDA, but everything here is live right now. Click through and judge for yourself.
           </SectionHead>
           <div className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-2">
             {FEATURED.slice(0, 6).map((w, i) => (
@@ -140,7 +108,7 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
-          <div className="mt-16 flex justify-center"><Link to="/work" className="btn-ink">See all 50+ projects <Arrow /></Link></div>
+          <div className="mt-16 flex justify-center"><Link to="/work" className="btn-ink">See more of our work <Arrow /></Link></div>
         </div>
       </section>
 
