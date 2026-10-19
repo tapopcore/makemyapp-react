@@ -66,7 +66,7 @@ export default function Contact() {
         </a>
         <div className="rounded-[22px] border border-ink p-8">
           <p className="label text-mute">Old school</p>
-          <a href={`mailto:${SITE.email}`} className="display mt-8 block break-all text-[30px] tracking-[-0.03em] underline-swipe">{SITE.email}</a>
+          <a href={`mailto:${SITE.email}`} className="display mt-8 block whitespace-nowrap text-[clamp(22px,6.6vw,30px)] tracking-[-0.03em] underline-swipe">{SITE.email}</a>
           <a href={`tel:+${SITE.phoneRaw}`} className="mt-2 block text-ink-2 underline-swipe">{SITE.phone}</a>
           <p className="mt-6 text-sm text-mute">{SITE.hours}</p>
         </div>
@@ -127,11 +127,11 @@ export default function Contact() {
           <p className="label text-mute">Visit us</p>
           <p className="display mt-4 text-[32px] leading-tight tracking-[-0.03em]">{SITE.address}</p>
           <p className="mt-4 text-ink-2">{SITE.hours}. Please book before visiting.</p>
-          <a href="https://maps.google.com/?q=Kundan+Mansion+Asaf+Ali+Road+Daryaganj+Delhi" target="_blank" rel="noopener" className="btn-line mt-6">Get directions <Arrow /></a>
+          <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.mapsQuery)}`} target="_blank" rel="noopener" className="btn-line mt-6">Get directions <Arrow /></a>
         </div>
         <div className="overflow-hidden rounded-[22px] border border-ink lg:col-span-8">
           <iframe title="MakeMyApp office map" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="h-[360px] w-full grayscale"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.6398181016593!2d77.23912437780204!3d28.649583620557774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfce08f8e147f%3A0x1b1829897b44db45!2s2-A%2C%202-A%2C%20Daryaganj%2C%20Delhi%2C%20110002!5e1!3m2!1sen!2sin!4v1752129463692!5m2!1sen!2sin" />
+            src={`https://www.google.com/maps?q=${encodeURIComponent(SITE.mapsQuery)}&output=embed`} />
         </div>
       </section>
 
