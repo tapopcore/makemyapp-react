@@ -7,7 +7,7 @@ export default function About() {
     <>
       <PageHero kicker="About us" title={<>Builders first.<br /><span className="text-violet">Agency second.</span></>} />
 
-      <section className="wrap grid gap-12 pb-20 lg:grid-cols-12">
+      <section className="wrap grid gap-12 sec-sm lg:grid-cols-12">
         <Reveal className="lg:col-span-7">
           <div className="space-y-6 text-[19px] leading-relaxed text-ink-2">
             <p className="display text-[clamp(28px,3vw,40px)] leading-[1.15] tracking-[-0.025em] text-ink">
@@ -28,7 +28,7 @@ export default function About() {
       </section>
 
       {/* TEAM */}
-      <section className="bg-ink py-24 text-paper">
+      <section className="sec-band bg-ink text-paper">
         <div className="wrap">
           <p className="label text-paper/60">The people you'll work with</p>
           <h2 className="display mt-4 text-[clamp(44px,6vw,88px)]">Meet the team.</h2>
@@ -51,7 +51,7 @@ export default function About() {
       </section>
 
       {/* VALUES */}
-      <section className="wrap py-24">
+      <section className="wrap sec-sm">
         <h2 className="display text-[clamp(40px,5.6vw,80px)]">What we stand by.</h2>
         <div className="mt-12 grid gap-x-10 border-t border-ink sm:grid-cols-2">
           {PRINCIPLES.map((p, i) => (
@@ -66,7 +66,7 @@ export default function About() {
       </section>
 
       {/* AWARDS + STACK */}
-      <section className="wrap grid gap-10 pb-16 lg:grid-cols-2">
+      <section className="wrap grid gap-10 sec-sm lg:grid-cols-2">
         <div className="rounded-[22px] border border-ink bg-blaze p-8 sm:p-10">
           <p className="label">Awards</p>
           <ul className="mt-6 space-y-6">

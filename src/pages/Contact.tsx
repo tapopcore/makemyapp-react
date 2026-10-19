@@ -51,7 +51,7 @@ export default function Contact() {
         Pick whatever's easiest. We reply to every message within one working day.
       </PageHero>
 
-      <section className="wrap grid gap-4 pb-16 md:grid-cols-3">
+      <section className="wrap grid gap-4 sec-sm md:grid-cols-3">
         <a href={SITE.calendly} target="_blank" rel="noopener" onClick={() => track("book_call", "contact_card")} className="group rounded-[22px] border border-ink bg-violet p-8 text-paper transition-transform hover:-translate-y-1">
           <p className="label text-paper/60">Fastest</p>
           <p className="display mt-8 text-[38px] tracking-[-0.03em]">Book a free 30 min call</p>
@@ -72,7 +72,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="wrap grid gap-12 py-12 lg:grid-cols-12">
+      <section className="wrap grid gap-12 sec-sm lg:grid-cols-12">
         <div className="lg:col-span-4">
           <h2 className="display text-[clamp(40px,4.6vw,64px)]">Or tell us here.</h2>
           <p className="mt-5 text-[17px] leading-relaxed text-ink-2">Share a few details and we'll come back with honest advice and a rough price range, before any call if you prefer.</p>
@@ -122,7 +122,7 @@ export default function Contact() {
         </Reveal>
       </section>
 
-      <section className="wrap grid gap-8 py-16 lg:grid-cols-12">
+      <section className="wrap grid gap-8 sec-sm lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="label text-mute">Visit us</p>
           <p className="display mt-4 text-[32px] leading-tight tracking-[-0.03em]">{SITE.address}</p>
@@ -135,7 +135,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="wrap pb-24 pt-8">
+      <section className="wrap pt-10 pb-20 sm:pt-14 sm:pb-28">
         <h2 className="display text-[clamp(36px,4.4vw,60px)]">Before you ask</h2>
         <div className="mt-8"><Faq items={FAQS} /></div>
       </section>

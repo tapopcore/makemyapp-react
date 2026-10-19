@@ -28,7 +28,7 @@ export default function Work() {
       </div>
 
       {shots.length > 0 && (
-        <section className="wrap py-16">
+        <section className="wrap sec-sm">
           <div className="grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
             {shots.map((w, i) => (
               <Reveal key={w.name} delay={(i % 3) * 80}>
@@ -47,7 +47,7 @@ export default function Work() {
       )}
 
       {rest.length > 0 && (
-        <section className="wrap pb-16">
+        <section className="wrap sec-sm">
           <h2 className="label text-mute">{f === "All" ? "More projects" : `More ${f.toLowerCase()} projects`}</h2>
           <ul className="mt-6 border-t border-ink">
             {rest.map(w => (
@@ -64,7 +64,7 @@ export default function Work() {
         </section>
       )}
 
-      <section className="wrap pb-6">
+      <section className="wrap sec-sm">
         <div className="grid gap-5 lg:grid-cols-3">
           {TESTIMONIALS.slice(0, 3).map(t => (
             <figure key={t.name} className="rounded-[20px] border border-ink bg-paper-2 p-7">

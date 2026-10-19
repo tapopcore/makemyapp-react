@@ -14,7 +14,7 @@ export default function ServiceDetail() {
 
   return (
     <>
-      <section className="wrap pt-36 pb-16 sm:pt-44">
+      <section className="hero-top wrap pb-10 sm:pb-14">
         <div className="hero-in">
           <nav aria-label="Breadcrumb" className="label text-mute"><Link to="/services" className="underline-swipe">Services</Link> / {page.short}</nav>
           <h1 className="display mt-6 max-w-[16ch] text-[clamp(48px,8.4vw,124px)]">{page.h1}</h1>
@@ -33,7 +33,7 @@ export default function ServiceDetail() {
       </section>
 
       {priced.length > 1 && (
-        <section className="wrap pb-6">
+        <section className="wrap sec-sm">
           <div className="grid gap-4 sm:grid-cols-3">
             {priced.map(s => (
               <div key={s.name} className="rounded-[18px] border border-ink p-6">
@@ -46,7 +46,7 @@ export default function ServiceDetail() {
         </section>
       )}
 
-      <section className="wrap grid gap-12 py-16 lg:grid-cols-2">
+      <section className="wrap grid gap-12 sec-sm lg:grid-cols-2">
         <Reveal>
           <p className="label text-mute">Good fit if you are</p>
           <ul className="mt-6 border-t border-ink">
@@ -66,7 +66,7 @@ export default function ServiceDetail() {
       </section>
 
       {shots.length > 0 && (
-        <section className="bg-paper-2 py-20">
+        <section className="sec-band bg-paper-2">
           <div className="wrap">
             <h2 className="display text-[clamp(36px,4.6vw,64px)]">Related work</h2>
             <div className="mt-10 grid gap-8 md:grid-cols-2">
@@ -86,7 +86,7 @@ export default function ServiceDetail() {
         </section>
       )}
 
-      <section className="wrap py-20">
+      <section className="wrap sec-sm">
         <h2 className="display text-[clamp(36px,4.6vw,64px)]">How it runs</h2>
         <ol className="mt-10 grid gap-px overflow-hidden rounded-[20px] border border-ink bg-ink sm:grid-cols-2 lg:grid-cols-3">
           {PROCESS.map((p, i) => (
@@ -99,7 +99,7 @@ export default function ServiceDetail() {
         </ol>
       </section>
 
-      <section className="wrap pb-10">
+      <section className="wrap sec-sm">
         <h2 className="display text-[clamp(36px,4.6vw,64px)]">Questions</h2>
         <div className="mt-8"><Faq items={page.faqs} /></div>
       </section>

@@ -10,7 +10,7 @@ const S = ({ h, children }: { h: string; children: ReactNode }) => (
 
 export default function Privacy() {
   return (
-    <article className="wrap max-w-3xl pt-36 pb-24 sm:pt-44">
+    <article className="hero-top wrap max-w-3xl pb-20 sm:pb-28">
       <p className="label text-mute">Effective 21 June 2025</p>
       <h1 className="display mt-4 text-[clamp(48px,8vw,96px)]">Privacy policy</h1>
       <p className="mt-6 text-[18px] leading-relaxed text-ink-2">MakeMyApp respects your privacy. This policy explains how we collect, use and protect the information you share when you visit makemyapp.co or use our services.</p>

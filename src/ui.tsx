@@ -206,7 +206,7 @@ export function SectionHead({ kicker, title, children, light = false }: { kicker
 
 export function PageHero({ kicker, title, children }: { kicker: string; title: ReactNode; children?: ReactNode }) {
   return (
-    <section className="wrap pt-36 pb-14 sm:pt-44 sm:pb-20">
+    <section className="hero-top wrap pb-10 sm:pb-14">
       <div className="hero-in">
         <p className="label text-mute">{kicker}</p>
         <h1 className="display mt-5 max-w-[14ch] text-[clamp(52px,10vw,148px)]">{title}</h1>
@@ -218,7 +218,7 @@ export function PageHero({ kicker, title, children }: { kicker: string; title: R
 
 export function CtaBand({ title = "Have something in mind?", line = "Tell us what you're building. We'll tell you honestly what it takes, what it costs, and whether we're the right fit." }: { title?: string; line?: string }) {
   return (
-    <section className="wrap py-24">
+    <section className="wrap pt-10 pb-20 sm:pt-14 sm:pb-28">
       <Reveal className="relative overflow-hidden rounded-[28px] border border-ink bg-violet px-6 py-14 text-paper sm:px-14 sm:py-20">
         <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-[380px] rounded-full bg-blaze/90 blur-[2px]" />
         <div aria-hidden className="pointer-events-none absolute -right-10 top-10 size-[240px] rounded-full border border-paper/30" style={{ animation: "spin-slow 30s linear infinite" }} />

@@ -55,6 +55,10 @@ body::before {
 
 @utility wrap { margin-inline: auto; width: 100%; max-width: 1320px; padding-inline: 1rem; @media (width >= 40rem) { padding-inline: 1.5rem; } @media (width >= 64rem) { padding-inline: 2.5rem; } }
 @utility display { font-family: var(--font-display); font-variation-settings: "opsz" 96, "wdth" 100; letter-spacing: -0.035em; line-height: .92; font-weight: 800; }
+@utility hero-top { padding-top: 100px; @media (width >= 40rem) { padding-top: 108px; } }
+@utility sec { padding-block: 80px; @media (width >= 40rem) { padding-block: 112px; } }
+@utility sec-sm { padding-block: 40px; @media (width >= 40rem) { padding-block: 56px; } }
+@utility sec-band { padding-block: 80px; margin-block: 40px; @media (width >= 40rem) { padding-block: 112px; margin-block: 56px; } }
 @utility label { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
 
 @utility btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 9999px; padding: .875rem 1.5rem; font-size: 15px; font-weight: 600; transition: all .2s; }

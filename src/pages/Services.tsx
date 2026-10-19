@@ -11,14 +11,14 @@ export default function Services() {
         19 services across build, brand, growth and AI. Every one shows what it starts at, so you can plan before we talk. Your final quote is fixed and milestone-based, after a free call.
       </PageHero>
 
-      <nav aria-label="Service groups" className="wrap -mt-4 mb-6 flex flex-wrap gap-2">
+      <nav aria-label="Service groups" className="wrap -mt-4 mb-10 flex flex-wrap gap-2 sm:mb-14">
         {PILLARS.map(p => <a key={p.name} href={`#${p.name.replace(/\W+/g, "-").toLowerCase()}`} className="chip !px-4 !py-2 !text-sm hover:bg-ink hover:text-paper">{p.name}</a>)}
       </nav>
 
       {PILLARS.map((p, pi) => {
         const list = SERVICES.filter(s => s.pillar === p.name);
         return (
-          <section key={p.name} id={p.name.replace(/\W+/g, "-").toLowerCase()} className="wrap scroll-mt-24 py-12 sm:py-16">
+          <section key={p.name} id={p.name.replace(/\W+/g, "-").toLowerCase()} className="wrap scroll-mt-24 sec-sm">
             <div className="grid gap-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <div className={`sticky top-28 rounded-[22px] border border-ink p-8 ${pillarBg[p.name]}`}>
@@ -53,7 +53,7 @@ export default function Services() {
         );
       })}
 
-      <section className="wrap py-16">
+      <section className="wrap sec-sm">
         <p className="label text-mute">Go deeper</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICE_PAGES.map(p => (
@@ -65,7 +65,7 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="wrap py-16">
+      <section className="wrap sec-sm">
         <h2 className="display text-[clamp(36px,4.4vw,60px)]">About pricing</h2>
         <div className="mt-8">
           <Faq items={[
