@@ -387,6 +387,8 @@ export const META: Record<string, PageMeta> = {
     description: "Meet the team behind MakeMyApp, the Delhi agency that also built Qviq. Tech Startup of the Year 2023, Bharat Ke Maharathi Awards." },
   "/contact": { title: "Contact MakeMyApp | Book a Free Call",
     description: "Book a free 30 minute call, WhatsApp +91 92424 24232 or email team@makemyapp.co. Office at ITL Tower, Netaji Subhash Place, Delhi." },
+  "/news": { title: "AI News Today: Latest AI Updates for Business | MakeMyApp",
+    description: "The day's most important AI news from TechCrunch, The Verge, MIT Technology Review and more. Updated every 30 minutes by the MakeMyApp AI Desk." },
   "/privacy-policy": { title: "Privacy Policy | MakeMyApp", description: "How MakeMyApp collects, uses and protects your information." },
   "/404": { title: "Page not found | MakeMyApp", description: "This page doesn't exist." },
 };

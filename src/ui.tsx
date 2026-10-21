@@ -62,6 +62,7 @@ const NAV = [
   { to: "/services", label: "Services" },
   { to: "/work", label: "Work" },
   { to: "/about", label: "About" },
+  { to: "/news", label: "AI News" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -135,7 +136,7 @@ function Footer() {
             <div>
               <p className="label text-paper/50">Pages</p>
               <ul className="mt-4 space-y-2.5 text-[15px]">
-                {[["/", "Home"], ["/services", "Services"], ["/work", "Work"], ["/about", "About"], ["/contact", "Contact"]].map(([to, l]) => <li key={to}><Link className="underline-swipe" to={to}>{l}</Link></li>)}
+                {[["/", "Home"], ["/services", "Services"], ["/work", "Work"], ["/about", "About"], ["/news", "AI News"], ["/contact", "Contact"]].map(([to, l]) => <li key={to}><Link className="underline-swipe" to={to}>{l}</Link></li>)}
               </ul>
             </div>
             <div>

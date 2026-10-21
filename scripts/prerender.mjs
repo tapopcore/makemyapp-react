@@ -10,6 +10,18 @@ const server = await import(pathToFileURL(path.join(root, "dist-server/entry-ser
 const { render, META, ROUTES, SITE, SERVICE_PAGES, FAQS, TESTIMONIALS } = server;
 
 const template = fs.readFileSync(path.join(dist, "index.html"), "utf8");
+
+// News snapshot for /news and the homepage strip. Vercel's build can reach the feeds;
+// if it can't (or we're offline), pages still build and the browser loads news live.
+const { getNews } = await import(pathToFileURL(path.join(root, "lib/news.mjs")).href);
+let news = null;
+if (process.env.NEWS_FIXTURE) news = JSON.parse(fs.readFileSync(process.env.NEWS_FIXTURE, "utf8"));
+else try {
+  news = await Promise.race([getNews({ timeoutMs: 6000 }), new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 12000))]);
+  if (!news.items.length) news = null;
+} catch { news = null; }
+console.log(news ? `  news snapshot: ${news.items.length} stories from ${news.sources.filter(s => s.ok).length} sources` : "  news snapshot: unavailable, will load live in the browser");
+const NEWS_ROUTES = new Set(["/", "/news"]);
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 const today = new Date().toISOString().slice(0, 10);
 
@@ -72,7 +84,7 @@ function page(route, renderUrl = route) {
     .replace(/<title>.*?<\/title>/s, `<title>${esc(m.title)}</title>`)
     .replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${esc(m.description)}" />`)
     .replace("<!--head-->", head(route))
-    .replace("<!--app-->", render(renderUrl));
+    .replace("<!--app-->", render(renderUrl, NEWS_ROUTES.has(route) ? news : null) + (NEWS_ROUTES.has(route) && news ? `<script>window.__NEWS__=${JSON.stringify(news).replace(/</g, "\\u003c")}</script>` : ""));
 }
 
 for (const route of ROUTES) {

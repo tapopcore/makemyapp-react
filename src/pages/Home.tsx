@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { AWARDS, FAQS, FEATURED, MORE_WORK, SITE, TESTIMONIALS } from "../content";
 import { Principles, ProcessSteps } from "../sections";
+import { NewsStrip } from "../news";
 import { BrandMarquee, HeroBadge, TileGrid, Typewriter } from "../fx";
 import { PillarBento } from "../pillars";
 import { Arrow, ArrowUR, BrowserShot, CtaBand, Faq, Reveal, SectionHead, track } from "../ui";
@@ -150,6 +151,9 @@ export default function Home() {
         </SectionHead>
         <ProcessSteps />
       </section>
+
+      {/* AI NEWS */}
+      <NewsStrip />
 
       {/* AWARDS */}
       <section className="border-y border-ink bg-lilac">
