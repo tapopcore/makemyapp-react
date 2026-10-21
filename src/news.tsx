@@ -191,7 +191,6 @@ export default function NewsPage() {
     return g;
   }, [visible]);
 
-  const liveSources = data?.sources.filter(s => s.ok).map(s => s.name) ?? [];
 
   return (
     <>
@@ -203,9 +202,9 @@ export default function NewsPage() {
           </p>
           <h1 className="display mt-5 max-w-[14ch] text-[clamp(52px,9vw,132px)]">AI news, <span className="text-violet">minus the noise.</span></h1>
           <p className="mt-7 max-w-2xl text-[19px] leading-relaxed text-ink-2">
-            The AI stories that matter for business, pulled from {liveSources.length ? liveSources.slice(0, 3).join(", ") + (liveSources.length > 3 ? ` and ${liveSources.length - 3} more` : "") : "leading tech publications"}. Refreshed every 30 minutes. Read the headline here, the full story at the source.
+            The AI updates worth your time, kept short and simple. Get the gist here, then read the full story from the original publisher.
           </p>
-          {data && <p className="mt-4 text-sm text-mute" suppressHydrationWarning>Last updated {mounted ? ago(data.updatedAt) : fmtDate(data.updatedAt)} · {items.length} stories</p>}
+          {data && <p className="mt-4 text-sm text-mute" suppressHydrationWarning>Updated {mounted ? ago(data.updatedAt) : fmtDate(data.updatedAt)}</p>}
         </div>
       </section>
 
@@ -268,7 +267,7 @@ export default function NewsPage() {
             )}
 
             <p className="mt-14 max-w-3xl text-[13px] leading-relaxed text-mute">
-              Headlines and summaries belong to their publishers and link to the original story. MakeMyApp curates this feed automatically and is not affiliated with these publications.
+              Headlines and summaries belong to their publishers, and every story links to the original. MakeMyApp is not affiliated with these publications.
             </p>
           </>
         )}

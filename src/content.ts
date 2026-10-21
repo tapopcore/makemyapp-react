@@ -388,7 +388,7 @@ export const META: Record<string, PageMeta> = {
   "/contact": { title: "Contact MakeMyApp | Book a Free Call",
     description: "Book a free 30 minute call, WhatsApp +91 92424 24232 or email team@makemyapp.co. Office at ITL Tower, Netaji Subhash Place, Delhi." },
   "/news": { title: "AI News Today: Latest AI Updates for Business | MakeMyApp",
-    description: "The day's most important AI news from TechCrunch, The Verge, MIT Technology Review and more. Updated every 30 minutes by the MakeMyApp AI Desk." },
+    description: "The AI updates that matter for business, kept short and simple. Daily AI news from the MakeMyApp AI Desk." },
   "/privacy-policy": { title: "Privacy Policy | MakeMyApp", description: "How MakeMyApp collects, uses and protects your information." },
   "/404": { title: "Page not found | MakeMyApp", description: "This page doesn't exist." },
 };
