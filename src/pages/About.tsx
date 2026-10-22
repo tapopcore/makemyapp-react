@@ -1,6 +1,24 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AWARDS, PRINCIPLES, STACK, TEAM } from "../content";
 import { ArrowUR, BrowserShot, CtaBand, PageHero, Reveal } from "../ui";
+
+// Desktop: colour on hover. Touch screens: colour while the photo sits in the middle of the screen.
+function TeamPhoto({ img, name }: { img: string; name: string }) {
+  const ref = useRef<HTMLImageElement | null>(null);
+  const [live, setLive] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !window.matchMedia("(hover: none)").matches || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(([e]) => setLive(e.isIntersecting), { rootMargin: "-30% 0px -30% 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <img ref={ref} src={`/img/team/${img}.webp`} alt={name} width={480} height={480} loading="lazy"
+      className={`aspect-square w-full object-cover transition-[filter,transform] duration-700 ease-out hover:grayscale-0 ${live ? "scale-[1.03] grayscale-0" : "grayscale"}`} />
+  );
+}
 
 export default function About() {
   return (
@@ -36,7 +54,7 @@ export default function About() {
             {TEAM.map((t, i) => (
               <Reveal key={t.name} delay={i * 100} as="article">
                 <div className="overflow-hidden rounded-[20px] border border-paper/20 bg-paper-2">
-                  <img src={`/img/team/${t.img}.webp`} alt={t.name} width={480} height={480} loading="lazy" className="aspect-square w-full object-cover grayscale transition duration-500 hover:grayscale-0" />
+                  <TeamPhoto img={t.img} name={t.name} />
                 </div>
                 <h3 className="display mt-6 text-[34px] tracking-[-0.03em]">{t.name}</h3>
                 <p className="label mt-1 text-blaze">{t.role}</p>
