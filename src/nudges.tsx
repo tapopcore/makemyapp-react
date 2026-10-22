@@ -10,7 +10,8 @@ import { ArrowUR, track } from "./ui";
 /*                                                                     */
 /* Rules:                                                              */
 /*  - first one within 3s of landing, then back to back on a loop      */
-/*  - closing one stops them for the visit                             */
+/*  - closing one snoozes them 45s and drops that card; 3 closes in a  */
+/*    visit = stop until the next visit                                */
 /*  - pause on hover/touch; never while someone is typing in a form    */
 /*  - not shown on Contact or Privacy; respects reduced motion         */
 /* ------------------------------------------------------------------ */
@@ -31,7 +32,10 @@ const SHOW_FOR = 6000;      // each stays 6s
 const GAP = 600;            // next one follows right after
 const HIDDEN_ON = ["/contact", "/privacy-policy"];
 
-const KEY_DISMISSED = "mma_nudges_off";
+const KEY_CLOSES = "mma_nudges_closes";     // how many times closed this visit
+const KEY_HIDDEN = "mma_nudges_hidden";     // ids the visitor closed
+const SNOOZE_MS = 45000;                    // pause after a close
+const MAX_CLOSES = 3;                       // closed 3 times = stop for this visit
 const ss = {
   get(k: string) { try { return sessionStorage.getItem(k); } catch { return null; } },
   set(k: string, v: string) { try { sessionStorage.setItem(k, v); } catch { /* ignore */ } },
@@ -128,14 +132,21 @@ export function Nudges() {
 
   useEffect(() => {
     setMounted(true);
-    if (ss.get(KEY_DISMISSED)) setOff(true);
+    if (Number(ss.get(KEY_CLOSES) || 0) >= MAX_CLOSES) setOff(true);
     const w = window as unknown as { __NEWS__?: { items: NewsItem[] } };
     if (w.__NEWS__?.items?.[0]) setNews(w.__NEWS__.items[0]);
     else fetchLive().then(d => d?.items?.[0] && setNews(d.items[0]));
   }, []);
 
   const hidden = HIDDEN_ON.some(p => pathname.startsWith(p));
-  const queue = useMemo(() => queueFor(pathname, news), [pathname, news]);
+  const [closedIds, setClosedIds] = useState<string[]>([]);
+  useEffect(() => { try { setClosedIds(JSON.parse(ss.get(KEY_HIDDEN) || "[]")); } catch { /* ignore */ } }, []);
+  const queue = useMemo(() => {
+    const q = queueFor(pathname, news);
+    const left = q.filter(n => !closedIds.includes(n.id) && !(n.tone === "proof" && closedIds.some(id => id.startsWith("proof-"))));
+    return left.length ? left : q;
+  }, [pathname, news, closedIds]);
+  const snoozeUntil = useRef(0);
 
   useEffect(() => { idx.current = 0; setCurrent(null); setLeaving(false); }, [pathname]);
 
@@ -152,7 +163,7 @@ export function Nudges() {
       remaining.current = SHOW_FOR; startedAt.current = Date.now();
       setLeaving(false); setCurrent(n);
       track("nudge_view", n.id);
-    }, shownOnce.current || tick > 0 ? GAP : FIRST_DELAY);
+    }, Math.max(shownOnce.current || tick > 0 ? GAP : FIRST_DELAY, snoozeUntil.current - Date.now()));
     return () => clearTimeout(t);
   }, [mounted, off, hidden, current, queue, tick]);
 
@@ -176,7 +187,15 @@ export function Nudges() {
   if (!mounted || off || hidden) return null;
   if (!current) return <div ref={slot} aria-hidden data-floating className={`${slotCls} pointer-events-none h-0`} />;
 
-  const close = () => { track("nudge_close", current.id); ss.set(KEY_DISMISSED, "1"); setLeaving(true); window.setTimeout(() => setOff(true), 380); };
+  const close = () => {
+    const closes = Number(ss.get(KEY_CLOSES) || 0) + 1;
+    ss.set(KEY_CLOSES, String(closes));
+    const ids = [...closedIds, current.id]; ss.set(KEY_HIDDEN, JSON.stringify(ids));
+    track("nudge_close", current.id);
+    snoozeUntil.current = Date.now() + SNOOZE_MS;
+    setLeaving(true);
+    window.setTimeout(() => { setClosedIds(ids); if (closes >= MAX_CLOSES) setOff(true); }, 380);
+  };
 
   return (
     <div role="status" aria-live="polite" ref={slot} data-floating
