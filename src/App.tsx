@@ -9,6 +9,7 @@ import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import NewsPage from "./news";
+import { Nudges } from "./nudges";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/privacy-policy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Nudges />
     </Layout>
   );
 }

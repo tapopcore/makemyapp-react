@@ -28,7 +28,7 @@ function initial(): NewsData | null {
 }
 
 let inflight: Promise<NewsData | null> | null = null;
-function fetchLive(): Promise<NewsData | null> {
+export function fetchLive(): Promise<NewsData | null> {
   if (!inflight) {
     inflight = fetch("/api/news", { headers: { accept: "application/json" } })
       .then(r => (r.ok ? r.json() : null))
