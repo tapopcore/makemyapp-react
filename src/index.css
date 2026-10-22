@@ -42,6 +42,8 @@
 @keyframes cta-wiggle { 0%,100% { transform: none } 20% { transform: rotate(-2.2deg) scale(1.03) } 40% { transform: rotate(2deg) scale(1.03) } 60% { transform: rotate(-1deg) } 80% { transform: rotate(.5deg) } }
 @keyframes cta-ring { 0% { opacity: .8; transform: scale(1) } 100% { opacity: 0; transform: scale(1.6) } }
 @keyframes cta-shine { 0%,55% { left: -40% } 100% { left: 130% } }
+@keyframes cta-pop { 0% { opacity: 0; transform: scale(.4) rotate(-40deg) } 70% { transform: scale(1.12) rotate(6deg) } 100% { opacity: 1; transform: none } }
+.cta-pop { animation: cta-pop .5s cubic-bezier(.2,.9,.25,1.2) both; }
 .cta-in { animation: cta-in .6s cubic-bezier(.2,.9,.25,1.15) both; }
 .cta-roll { animation: cta-roll .45s cubic-bezier(.2,.9,.25,1) both; }
 .cta-wiggle { animation: cta-wiggle .7s ease-in-out .1s both; }

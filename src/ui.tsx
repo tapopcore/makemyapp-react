@@ -168,17 +168,6 @@ function Footer() {
   );
 }
 
-/* ---------- floating WhatsApp ---------- */
-function WaFloat() {
-  return (
-    <a href={wa("Hi MakeMyApp, I'd like to discuss a project.")} target="_blank" rel="noopener" onClick={() => track("whatsapp", "float")}
-      className="fixed bottom-5 right-5 z-40 grid size-14 place-items-center rounded-full border border-ink bg-[#25D366] text-ink shadow-[3px_3px_0_0_var(--color-ink)] transition-transform hover:-translate-y-0.5"
-      aria-label="Chat with us on WhatsApp">
-      <WaIcon className="size-7" />
-    </a>
-  );
-}
-
 export function Layout({ children }: { children: ReactNode }) {
   useRouteMeta();
   return (
@@ -187,7 +176,6 @@ export function Layout({ children }: { children: ReactNode }) {
       <Nav />
       <main id="main">{children}</main>
       <Footer />
-      <WaFloat />
     </>
   );
 }

@@ -217,63 +217,69 @@ const Ico = ({ children }: { children: ReactNode }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-[18px]" aria-hidden>{children}</svg>
 );
 const CTAS: Cta[] = [
-  { id: "call", label: "Book a free 30 min call", short: "Free 30 min call", href: SITE.calendly, tile: "bg-blaze text-ink",
-    icon: <Ico><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4" /></Ico> },
   { id: "whatsapp", label: "Chat with us on WhatsApp", short: "WhatsApp us", href: wa("Hi MakeMyApp, I'd like to discuss a project."), tile: "bg-[#25D366] text-ink",
     icon: <svg viewBox="0 0 24 24" fill="currentColor" className="size-[18px]" aria-hidden><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm5.8 14.03c-.24.68-1.41 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.54-.34.72-.34h.52c.17 0 .39-.06.61.47.23.54.77 1.88.84 2.02.07.13.11.29.02.47-.09.18-.13.29-.27.45-.13.16-.28.35-.4.47-.13.13-.27.28-.12.55.16.27.7 1.15 1.5 1.86 1.03.92 1.9 1.2 2.17 1.34.27.13.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.61-.13.25.09 1.59.75 1.86.88.27.14.45.2.52.32.07.11.07.66-.17 1.33Z" /></svg> },
+  { id: "call", label: "Book a free 30 min call", short: "Free 30 min call", href: SITE.calendly, tile: "bg-blaze text-ink",
+    icon: <Ico><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4" /></Ico> },
   { id: "prices", label: "See our starting prices", short: "See prices", to: "/services", tile: "bg-lilac text-violet",
     icon: <Ico><path d="M3 12V4h8l10 10-8 8L3 12Z" /><circle cx="7.5" cy="7.5" r="1.5" /></Ico> },
   { id: "ai", label: "Put AI to work for you", short: "AI for your business", to: "/services/ai-automation", tile: "bg-paper text-violet",
     icon: <Ico><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2" /><circle cx="12" cy="12" r="3.5" /></Ico> },
 ];
-const SWAP_EVERY = 3500;
+const OPEN_FOR = 3200;   // label visible
+const CLOSE_MS = 520;    // pill folds back into the circle
+const REST_MS = 650;     // circle holds, icon swaps, then it opens again
 
 export function CtaDock() {
-  const { pathname } = useLocation();
   const [mounted, setMounted] = useState(false);
   const [i, setI] = useState(0);
-  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const box = useRef<HTMLDivElement | null>(null);
-  const covering = useCovering(box, mounted && show);
+  const covering = useCovering(box, mounted);
+  const reduce = useRef(false);
 
-  useEffect(() => { setMounted(true); const t = window.setTimeout(() => setShow(true), 1200); return () => clearTimeout(t); }, []);
+  useEffect(() => { setMounted(true); reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches; }, []);
+
+  // open -> hold -> close -> swap -> open ...
   useEffect(() => {
-    if (!show || hover) return;
-    const t = window.setInterval(() => setI(n => (n + 1) % CTAS.length), SWAP_EVERY);
-    return () => clearInterval(t);
-  }, [show, hover]);
+    if (!mounted || hover) return;
+    let t: number;
+    if (!open) t = window.setTimeout(() => setOpen(true), i === 0 ? 1200 : REST_MS);
+    else t = window.setTimeout(() => {
+      setOpen(false);
+      window.setTimeout(() => setI(n => (n + 1) % CTAS.length), CLOSE_MS);
+    }, OPEN_FOR);
+    return () => clearTimeout(t);
+  }, [mounted, open, hover, i]);
 
-  if (!mounted || HIDDEN_ON.some(p => pathname.startsWith(p))) return null;
+  if (!mounted) return null;
   const c = CTAS[i];
+  const expanded = (open || hover) && !covering;
   const body = (
     <>
-      <span className={`relative grid size-10 shrink-0 place-items-center rounded-full border border-ink ${c.tile} transition-colors duration-300`}>
-        <span aria-hidden className="absolute inset-0 rounded-full border-2 border-blaze [animation:cta-ring_2.2s_ease-out_infinite]" />
-        {c.icon}
+      <span className={`relative z-10 grid size-14 shrink-0 place-items-center rounded-full border border-ink ${c.tile} transition-colors duration-300`}>
+        <span aria-hidden className="absolute -inset-px rounded-full border-2 border-blaze [animation:cta-ring_2.2s_ease-out_infinite]" />
+        <span key={c.id} className="cta-pop grid place-items-center [&_svg]:size-[22px]">{c.icon}</span>
       </span>
-      <span className="relative h-6 min-w-0 flex-1 overflow-hidden">
-        <span key={c.id} className="cta-roll absolute inset-0 flex items-center whitespace-nowrap text-[15px] font-semibold">
-          <span className="sm:hidden">{c.short}</span><span className="hidden sm:inline">{c.label}</span>
+      <span className="grid transition-[grid-template-columns] duration-500 ease-[cubic-bezier(.65,0,.35,1)]" style={{ gridTemplateColumns: expanded ? "1fr" : "0fr" }}>
+        <span className="overflow-hidden">
+          <span className={`flex items-center gap-2 whitespace-nowrap pl-5 pr-3 text-[15px] font-semibold transition-all duration-300 ${expanded ? "translate-x-0 opacity-100 delay-150" : "translate-x-3 opacity-0"}`}>
+            <span className="sm:hidden">{c.short}</span><span className="hidden sm:inline">{c.label}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-4 shrink-0" aria-hidden><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
         </span>
       </span>
-      <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-full bg-paper/10 transition-transform group-hover:translate-x-0.5">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-      </span>
-      <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-full"><span className="absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent [animation:cta-shine_3.5s_ease-in-out_infinite]" /></span>
+      <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-full"><span className={`absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent ${expanded ? "[animation:cta-shine_3.2s_ease-in-out_infinite]" : "opacity-0"}`} /></span>
     </>
   );
-  const cls = `group relative flex w-full items-center gap-3 rounded-full border border-ink bg-ink py-2 pl-2 pr-2 text-paper shadow-[4px_4px_0_0_var(--color-blaze)] transition-transform hover:-translate-y-0.5`;
+  const cls = `group relative flex flex-row-reverse items-center rounded-full border border-ink bg-ink text-paper shadow-[3px_3px_0_0_var(--color-ink)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 ${expanded ? "shadow-[4px_4px_0_0_var(--color-blaze)]" : ""}`;
   return (
-    <div ref={box} data-floating className={`fixed bottom-5 left-4 z-40 w-[calc(100%-104px)] max-w-[270px] sm:bottom-6 sm:left-6 sm:w-[310px] sm:max-w-none ${show ? "cta-in" : "pointer-events-none opacity-0"}`}
-      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <div className={`transition-all duration-500 ${covering ? "pointer-events-none translate-y-[140%] opacity-0" : ""}`} aria-hidden={covering}>
-      <div key={c.id} className="cta-wiggle">
-        {c.to
-          ? <Link to={c.to} onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</Link>
-          : <a href={c.href} target="_blank" rel="noopener" onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</a>}
-      </div>
-      </div>
+    <div ref={box} data-floating data-dock className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6"
+      onMouseEnter={() => { setHover(true); setOpen(true); }} onMouseLeave={() => setHover(false)}>
+      {c.to
+        ? <Link to={c.to} onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</Link>
+        : <a href={c.href} target="_blank" rel="noopener" onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</a>}
     </div>
   );
 }
