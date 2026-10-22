@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { SITE } from "./content";
+import { SITE, wa } from "./content";
 import { fetchLive, type NewsItem } from "./news";
 import { ArrowUR, track } from "./ui";
 
@@ -8,9 +8,9 @@ import { ArrowUR, track } from "./ui";
 /* Slide-in nudges (toasts). Small cards that slide in bottom-right    */
 /* (desktop) or bottom (phones), stay a few seconds, then slide out.    */
 /*                                                                     */
-/* Rules so they never get in the way:                                 */
-/*  - first one ~5s after landing, then one every ~25s                 */
-/*  - max 4 per visit; closing one stops them for the visit            */
+/* Rules:                                                              */
+/*  - first one within 3s of landing, then back to back on a loop      */
+/*  - closing one stops them for the visit                             */
 /*  - pause on hover/touch; never while someone is typing in a form    */
 /*  - not shown on Contact or Privacy; respects reduced motion         */
 /* ------------------------------------------------------------------ */
@@ -26,14 +26,12 @@ type Nudge = {
   tone: "news" | "call" | "proof" | "award" | "ai";
 };
 
-const FIRST_DELAY = 5000;
-const SHOW_FOR = 9000;
-const GAP = 25000;
-const MAX_PER_VISIT = 4;
+const FIRST_DELAY = 2500;   // first one within 3s of landing
+const SHOW_FOR = 6000;      // each stays 6s
+const GAP = 600;            // next one follows right after
 const HIDDEN_ON = ["/contact", "/privacy-policy"];
 
 const KEY_DISMISSED = "mma_nudges_off";
-const KEY_SEEN = "mma_nudges_seen";
 const ss = {
   get(k: string) { try { return sessionStorage.getItem(k); } catch { return null; } },
   set(k: string, v: string) { try { sessionStorage.setItem(k, v); } catch { /* ignore */ } },
@@ -45,7 +43,6 @@ const PROOF: Nudge[] = [
   { id: "proof-wedhaven", tone: "proof", kicker: "Rishika Agarwal, Wedhaven", title: "“They cared about the little details that matter to our users.”", cta: "See our work", to: "/work" },
   { id: "proof-deciwood", tone: "proof", kicker: "Ananya Meena, Deciwood", title: "“We wanted a website that felt as unique as our brand, and MakeMyApp absolutely nailed it.”", cta: "See our work", to: "/work" },
 ];
-const CALL: Nudge = { id: "call", tone: "call", kicker: "Free 30 min call", title: "Got an idea? Talk it through with us.", body: "Honest advice and a real price range. No sales pitch.", cta: "Book a slot", href: SITE.calendly };
 const AWARD: Nudge = { id: "award", tone: "award", kicker: "Award-winning studio", title: "Tech Startup of the Year 2023", body: "Bharat Ke Maharathi Awards. 300+ projects delivered since.", cta: "Meet the team", to: "/about" };
 const AI: Nudge = { id: "ai", tone: "ai", kicker: "AI for your business", title: "Let AI answer your customers 24x7.", body: "AI agents and WhatsApp automation, set up for you.", cta: "See how", to: "/services/ai-automation" };
 
@@ -55,10 +52,40 @@ function newsNudge(n: NewsItem): Nudge {
 
 function queueFor(path: string, news: NewsItem | null): Nudge[] {
   const proof = PROOF[Math.floor(Math.random() * PROOF.length)];
-  if (path.startsWith("/news")) return [AI, proof, CALL, AWARD];
-  if (path.startsWith("/services")) return [proof, ...(news ? [newsNudge(news)] : []), CALL, AWARD];
-  if (path.startsWith("/work")) return [CALL, ...(news ? [newsNudge(news)] : []), AWARD, proof];
-  return [...(news ? [newsNudge(news)] : []), proof, CALL, AWARD];
+  // the floating button already carries the free call, so toasts carry everything else
+  const n = news ? [newsNudge(news)] : [];
+  if (path.startsWith("/news")) return [AI, proof, AWARD];
+  if (path.startsWith("/services")) return [proof, ...n, AI, AWARD];
+  if (path.startsWith("/work")) return [...n, AWARD, proof, AI];
+  return [...n, proof, AI, AWARD];
+}
+
+/* ---------- never cover the page's own buttons ---------- */
+const PAGE_BUTTONS = "main .btn-ink, main .btn-line, main .btn-blaze, main .btn-paper, main form button, main input, main textarea, main select";
+function coversButtons(box: { left: number; right: number; top: number; bottom: number }) {
+  const pad = 10;
+  return [...document.querySelectorAll<HTMLElement>(PAGE_BUTTONS)].some(el => {
+    if (el.closest("[data-floating]")) return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.bottom > box.top - pad && r.top < box.bottom + pad && r.right > box.left - pad && r.left < box.right + pad;
+  });
+}
+function useCovering(ref: RefObject<HTMLElement | null>, active: boolean) {
+  const [covering, setCovering] = useState(false);
+  useEffect(() => {
+    if (!active) return;
+    let last = 0, pending = 0, hits = 0;
+    // hide only after two checks in a row agree (no flicker); come back straight away
+    const check = () => { last = Date.now(); pending = 0; const el = ref.current; if (!el) return;
+      if (coversButtons(el.getBoundingClientRect())) { hits++; if (hits >= 2) setCovering(true); else pending = window.setTimeout(check, 140); }
+      else { hits = 0; setCovering(false); } };
+    const on = () => { if (Date.now() - last > 120) check(); else if (!pending) pending = window.setTimeout(check, 130); };
+    check();
+    window.addEventListener("scroll", on, { passive: true }); window.addEventListener("resize", on);
+    const t = window.setInterval(check, 700);
+    return () => { clearTimeout(pending); window.removeEventListener("scroll", on); window.removeEventListener("resize", on); clearInterval(t); };
+  }, [ref, active]);
+  return covering;
 }
 
 /* ---------- visuals ---------- */
@@ -110,7 +137,10 @@ export function Nudges() {
   const [leaving, setLeaving] = useState(false);
   const [paused, setPaused] = useState(false);
   const [off, setOff] = useState(false);
+  const [tick, setTick] = useState(0);
+  const slot = useRef<HTMLDivElement | null>(null);
   const idx = useRef(0);
+  const shownOnce = useRef(false);
   const remaining = useRef(SHOW_FOR);
   const startedAt = useRef(0);
 
@@ -125,36 +155,24 @@ export function Nudges() {
   const hidden = HIDDEN_ON.some(p => pathname.startsWith(p));
   const queue = useMemo(() => queueFor(pathname, news), [pathname, news]);
 
-  // reset the rotation on route change, keep the visit-wide cap
   useEffect(() => { idx.current = 0; setCurrent(null); setLeaving(false); }, [pathname]);
 
-  // phones: hold the first nudge until the visitor has scrolled past the first screen
-  const [ready, setReady] = useState(false);
+  // show the next one: first within 3s, then back to back, looping
   useEffect(() => {
-    if (!mounted) return;
-    if (window.matchMedia("(min-width: 640px)").matches || Number(ss.get(KEY_SEEN) || 0) > 0) { setReady(true); return; }
-    const on = () => { if (window.scrollY > window.innerHeight * 0.8) { setReady(true); window.removeEventListener("scroll", on); } };
-    on(); window.addEventListener("scroll", on, { passive: true });
-    return () => window.removeEventListener("scroll", on);
-  }, [mounted]);
-
-  // schedule the next nudge
-  useEffect(() => {
-    if (!mounted || !ready || off || hidden || current) return;
-    const seen = Number(ss.get(KEY_SEEN) || 0);
-    if (seen >= MAX_PER_VISIT || idx.current >= queue.length) return;
-    const first = idx.current === 0 && seen === 0;
+    if (!mounted || off || hidden || current || !queue.length) return;
     const t = window.setTimeout(() => {
-      const typing = document.activeElement?.matches("input, textarea, select");
-      if (typing) return;
-      const n = queue[idx.current++];
-      ss.set(KEY_SEEN, String(Number(ss.get(KEY_SEEN) || 0) + 1));
+      if (document.activeElement?.matches("input, textarea, select")) { setTick(x => x + 1); return; }
+      const box = slot.current?.getBoundingClientRect();
+      if (box && coversButtons({ left: box.left, right: box.right, bottom: box.bottom, top: box.bottom - 120 })) { setTick(x => x + 1); return; }
+      const n = queue[idx.current % queue.length];
+      idx.current++;
+      shownOnce.current = true;
       remaining.current = SHOW_FOR; startedAt.current = Date.now();
       setLeaving(false); setCurrent(n);
       track("nudge_view", n.id);
-    }, first ? (window.matchMedia("(min-width: 640px)").matches ? FIRST_DELAY : 1500) : idx.current === 0 ? 8000 : GAP);
+    }, shownOnce.current || tick > 0 ? GAP : FIRST_DELAY);
     return () => clearTimeout(t);
-  }, [mounted, ready, off, hidden, current, queue]);
+  }, [mounted, off, hidden, current, queue, tick]);
 
   // auto-hide, pausable
   useEffect(() => {
@@ -165,24 +183,96 @@ export function Nudges() {
     return () => clearTimeout(t);
   }, [current, paused, leaving]);
 
-  // after the slide-out animation, clear
+  // after the slide-out animation, clear (which schedules the next one)
   useEffect(() => {
     if (!leaving) return;
     const t = window.setTimeout(() => { setCurrent(null); setLeaving(false); setPaused(false); }, 380);
     return () => clearTimeout(t);
   }, [leaving]);
 
-  if (!mounted || off || hidden || !current) return null;
+  const slotCls = "fixed bottom-[92px] left-4 right-4 z-40 sm:bottom-[96px] sm:left-auto sm:right-6 sm:w-[370px]";
+  if (!mounted || off || hidden) return null;
+  if (!current) return <div ref={slot} aria-hidden data-floating className={`${slotCls} pointer-events-none h-0`} />;
 
   const close = () => { track("nudge_close", current.id); ss.set(KEY_DISMISSED, "1"); setLeaving(true); window.setTimeout(() => setOff(true), 380); };
 
   return (
-    <div role="status" aria-live="polite"
-      className="fixed bottom-5 left-4 right-[88px] z-40 sm:bottom-[96px] sm:left-auto sm:right-6 sm:w-[370px]"
+    <div role="status" aria-live="polite" ref={slot} data-floating
+      className={slotCls}
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onTouchStart={() => setPaused(true)} onTouchEnd={() => window.setTimeout(() => setPaused(false), 1500)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
       <div className={leaving ? "nudge-out" : "nudge-in"}>
         <Card n={current} paused={paused} onClose={close} onAction={() => track("nudge_click", current.id)} />
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Floating CTA button (bottom-left). Always on screen; the message    */
+/* rolls to the next one every few seconds with a little wiggle.       */
+/* ------------------------------------------------------------------ */
+type Cta = { id: string; label: string; short: string; to?: string; href?: string; icon: ReactNode; tile: string };
+const Ico = ({ children }: { children: ReactNode }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-[18px]" aria-hidden>{children}</svg>
+);
+const CTAS: Cta[] = [
+  { id: "call", label: "Book a free 30 min call", short: "Free 30 min call", href: SITE.calendly, tile: "bg-blaze text-ink",
+    icon: <Ico><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4" /></Ico> },
+  { id: "whatsapp", label: "Chat with us on WhatsApp", short: "WhatsApp us", href: wa("Hi MakeMyApp, I'd like to discuss a project."), tile: "bg-[#25D366] text-ink",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="size-[18px]" aria-hidden><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm5.8 14.03c-.24.68-1.41 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.54-.34.72-.34h.52c.17 0 .39-.06.61.47.23.54.77 1.88.84 2.02.07.13.11.29.02.47-.09.18-.13.29-.27.45-.13.16-.28.35-.4.47-.13.13-.27.28-.12.55.16.27.7 1.15 1.5 1.86 1.03.92 1.9 1.2 2.17 1.34.27.13.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.61-.13.25.09 1.59.75 1.86.88.27.14.45.2.52.32.07.11.07.66-.17 1.33Z" /></svg> },
+  { id: "prices", label: "See our starting prices", short: "See prices", to: "/services", tile: "bg-lilac text-violet",
+    icon: <Ico><path d="M3 12V4h8l10 10-8 8L3 12Z" /><circle cx="7.5" cy="7.5" r="1.5" /></Ico> },
+  { id: "ai", label: "Put AI to work for you", short: "AI for your business", to: "/services/ai-automation", tile: "bg-paper text-violet",
+    icon: <Ico><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2" /><circle cx="12" cy="12" r="3.5" /></Ico> },
+];
+const SWAP_EVERY = 3500;
+
+export function CtaDock() {
+  const { pathname } = useLocation();
+  const [mounted, setMounted] = useState(false);
+  const [i, setI] = useState(0);
+  const [show, setShow] = useState(false);
+  const [hover, setHover] = useState(false);
+  const box = useRef<HTMLDivElement | null>(null);
+  const covering = useCovering(box, mounted && show);
+
+  useEffect(() => { setMounted(true); const t = window.setTimeout(() => setShow(true), 1200); return () => clearTimeout(t); }, []);
+  useEffect(() => {
+    if (!show || hover) return;
+    const t = window.setInterval(() => setI(n => (n + 1) % CTAS.length), SWAP_EVERY);
+    return () => clearInterval(t);
+  }, [show, hover]);
+
+  if (!mounted || HIDDEN_ON.some(p => pathname.startsWith(p))) return null;
+  const c = CTAS[i];
+  const body = (
+    <>
+      <span className={`relative grid size-10 shrink-0 place-items-center rounded-full border border-ink ${c.tile} transition-colors duration-300`}>
+        <span aria-hidden className="absolute inset-0 rounded-full border-2 border-blaze [animation:cta-ring_2.2s_ease-out_infinite]" />
+        {c.icon}
+      </span>
+      <span className="relative h-6 min-w-0 flex-1 overflow-hidden">
+        <span key={c.id} className="cta-roll absolute inset-0 flex items-center whitespace-nowrap text-[15px] font-semibold">
+          <span className="sm:hidden">{c.short}</span><span className="hidden sm:inline">{c.label}</span>
+        </span>
+      </span>
+      <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-full bg-paper/10 transition-transform group-hover:translate-x-0.5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </span>
+      <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-full"><span className="absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent [animation:cta-shine_3.5s_ease-in-out_infinite]" /></span>
+    </>
+  );
+  const cls = `group relative flex w-full items-center gap-3 rounded-full border border-ink bg-ink py-2 pl-2 pr-2 text-paper shadow-[4px_4px_0_0_var(--color-blaze)] transition-transform hover:-translate-y-0.5`;
+  return (
+    <div ref={box} data-floating className={`fixed bottom-5 left-4 z-40 w-[calc(100%-104px)] max-w-[270px] sm:bottom-6 sm:left-6 sm:w-[310px] sm:max-w-none ${show ? "cta-in" : "pointer-events-none opacity-0"}`}
+      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      <div className={`transition-all duration-500 ${covering ? "pointer-events-none translate-y-[140%] opacity-0" : ""}`} aria-hidden={covering}>
+      <div key={c.id} className="cta-wiggle">
+        {c.to
+          ? <Link to={c.to} onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</Link>
+          : <a href={c.href} target="_blank" rel="noopener" onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</a>}
+      </div>
       </div>
     </div>
   );

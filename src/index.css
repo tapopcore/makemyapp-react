@@ -37,6 +37,14 @@
 }
 .nudge-in { animation: nudge-in .55s cubic-bezier(.2,.9,.25,1.15) both; }
 .nudge-out { animation: nudge-out .35s ease-in both; }
+@keyframes cta-in { from { opacity: 0; transform: translateY(30px) } to { opacity: 1; transform: none } }
+@keyframes cta-roll { from { opacity: 0; transform: translateY(100%) } to { opacity: 1; transform: none } }
+@keyframes cta-wiggle { 0%,100% { transform: none } 20% { transform: rotate(-2.2deg) scale(1.03) } 40% { transform: rotate(2deg) scale(1.03) } 60% { transform: rotate(-1deg) } 80% { transform: rotate(.5deg) } }
+@keyframes cta-ring { 0% { opacity: .8; transform: scale(1) } 100% { opacity: 0; transform: scale(1.6) } }
+@keyframes cta-shine { 0%,55% { left: -40% } 100% { left: 130% } }
+.cta-in { animation: cta-in .6s cubic-bezier(.2,.9,.25,1.15) both; }
+.cta-roll { animation: cta-roll .45s cubic-bezier(.2,.9,.25,1) both; }
+.cta-wiggle { animation: cta-wiggle .7s ease-in-out .1s both; }
 @keyframes blink { 50% { opacity: 0 } }
 @keyframes grow { 0%,100% { width: 40% } 50% { width: 72% } }
 @keyframes pulse-soft { 0%,100% { opacity: .55 } 50% { opacity: 1 } }
