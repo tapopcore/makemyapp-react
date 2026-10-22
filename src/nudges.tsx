@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SITE, wa } from "./content";
 import { fetchLive, type NewsItem } from "./news";
@@ -70,24 +70,6 @@ function coversButtons(box: { left: number; right: number; top: number; bottom: 
     return r.width > 0 && r.bottom > box.top - pad && r.top < box.bottom + pad && r.right > box.left - pad && r.left < box.right + pad;
   });
 }
-function useCovering(ref: RefObject<HTMLElement | null>, active: boolean) {
-  const [covering, setCovering] = useState(false);
-  useEffect(() => {
-    if (!active) return;
-    let last = 0, pending = 0, hits = 0;
-    // hide only after two checks in a row agree (no flicker); come back straight away
-    const check = () => { last = Date.now(); pending = 0; const el = ref.current; if (!el) return;
-      if (coversButtons(el.getBoundingClientRect())) { hits++; if (hits >= 2) setCovering(true); else pending = window.setTimeout(check, 140); }
-      else { hits = 0; setCovering(false); } };
-    const on = () => { if (Date.now() - last > 120) check(); else if (!pending) pending = window.setTimeout(check, 130); };
-    check();
-    window.addEventListener("scroll", on, { passive: true }); window.addEventListener("resize", on);
-    const t = window.setInterval(check, 700);
-    return () => { clearTimeout(pending); window.removeEventListener("scroll", on); window.removeEventListener("resize", on); clearInterval(t); };
-  }, [ref, active]);
-  return covering;
-}
-
 /* ---------- visuals ---------- */
 const TONE: Record<Nudge["tone"], { tile: string; bar: string; icon: ReactNode }> = {
   news: { tile: "bg-ink text-paper", bar: "bg-blaze", icon: <path d="M4 5h12v14H6a2 2 0 0 1-2-2V5Zm12 4h4v8a2 2 0 0 1-2 2M8 9h4M8 13h4" /> },
@@ -227,7 +209,7 @@ const CTAS: Cta[] = [
     icon: <Ico><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2" /><circle cx="12" cy="12" r="3.5" /></Ico> },
 ];
 const OPEN_FOR = 3200;   // label visible
-const CLOSE_MS = 520;    // pill folds back into the circle
+const CLOSE_MS = 640;    // pill folds back into the circle
 const REST_MS = 650;     // circle holds, icon swaps, then it opens again
 
 export function CtaDock() {
@@ -235,27 +217,34 @@ export function CtaDock() {
   const [i, setI] = useState(0);
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(false);
-  const box = useRef<HTMLDivElement | null>(null);
-  const covering = useCovering(box, mounted);
-  const reduce = useRef(false);
+  const hoverRef = useRef(false);
 
-  useEffect(() => { setMounted(true); reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches; }, []);
+  useEffect(() => { setMounted(true); }, []);
 
-  // open -> hold -> close -> swap -> open ...
+  // One loop, one timer at a time: rest (closed) -> open -> hold -> close -> next ...
   useEffect(() => {
-    if (!mounted || hover) return;
-    let t: number;
-    if (!open) t = window.setTimeout(() => setOpen(true), i === 0 ? 1200 : REST_MS);
-    else t = window.setTimeout(() => {
-      setOpen(false);
-      window.setTimeout(() => setI(n => (n + 1) % CTAS.length), CLOSE_MS);
-    }, OPEN_FOR);
-    return () => clearTimeout(t);
-  }, [mounted, open, hover, i]);
+    if (!mounted) return;
+    let t = 0, alive = true;
+    const wait = (ms: number) => new Promise<void>(r => { t = window.setTimeout(r, ms); });
+    const untilFree = async () => { while (alive && hoverRef.current) await wait(250); };
+    (async () => {
+      await wait(1200);
+      let k = 0;
+      while (alive) {
+        setI(k); await wait(REST_MS);        // closed, new icon pops in
+        if (!alive) break; setOpen(true);
+        await wait(OPEN_FOR); await untilFree();
+        if (!alive) break; setOpen(false);
+        await wait(CLOSE_MS);
+        k = (k + 1) % CTAS.length;
+      }
+    })();
+    return () => { alive = false; clearTimeout(t); };
+  }, [mounted]);
 
   if (!mounted) return null;
   const c = CTAS[i];
-  const expanded = (open || hover) && !covering;
+  const expanded = open || hover;
   const body = (
     <>
       <span className={`relative z-10 grid size-14 shrink-0 place-items-center rounded-full border border-ink ${c.tile} transition-colors duration-300`}>
@@ -275,8 +264,8 @@ export function CtaDock() {
   );
   const cls = `group relative flex flex-row-reverse items-center rounded-full border border-ink bg-ink text-paper shadow-[3px_3px_0_0_var(--color-ink)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 ${expanded ? "shadow-[4px_4px_0_0_var(--color-blaze)]" : ""}`;
   return (
-    <div ref={box} data-floating data-dock className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6"
-      onMouseEnter={() => { setHover(true); setOpen(true); }} onMouseLeave={() => setHover(false)}>
+    <div data-floating data-dock className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6"
+      onMouseEnter={() => { hoverRef.current = true; setHover(true); }} onMouseLeave={() => { hoverRef.current = false; setHover(false); }}>
       {c.to
         ? <Link to={c.to} onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</Link>
         : <a href={c.href} target="_blank" rel="noopener" onClick={() => track("cta_dock", c.id)} className={cls} aria-label={c.label}>{body}</a>}
