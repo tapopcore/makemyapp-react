@@ -37,7 +37,7 @@ const org = {
   description: META["/"].description,
   email: SITE.email,
   telephone: SITE.phone.replace(/\s/g, ""),
-  priceRange: "₹999 to ₹99,999+",
+  priceRange: "₹999 to ₹1,49,999+",
   address: { "@type": "PostalAddress", streetAddress: "A-09, ITL Tower, 910-911, 9th Floor, Netaji Subhash Place", addressLocality: "Delhi", postalCode: "110034", addressRegion: "Delhi", addressCountry: "IN" },
   geo: { "@type": "GeoCoordinates", latitude: 28.6925, longitude: 77.1520 },
   openingHoursSpecification: [{ "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], opens: "09:00", closes: "17:00" }],

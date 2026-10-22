@@ -8,7 +8,7 @@ export default function Services() {
   return (
     <>
       <PageHero kicker="Services & starting prices" title={<>Everything,<br />priced openly.</>}>
-        19 services across build, brand, growth and AI. Every one shows what it starts at, so you can plan before we talk. Your final quote is fixed and milestone-based, after a free call.
+        20 services across build, brand, growth and AI. Every one shows what it starts at, so you can plan before we talk. Your final quote is fixed and milestone-based, after a free call.
       </PageHero>
 
       <nav aria-label="Service groups" className="wrap -mt-4 mb-10 flex flex-wrap gap-2 sm:mb-14">
