@@ -18,7 +18,10 @@ export default function ServiceDetail() {
       <section className="hero-top wrap pb-10 sm:pb-14">
         <div className="hero-in">
           <nav aria-label="Breadcrumb" className="label text-mute"><Link to="/services" className="underline-swipe">Services</Link> / {page.short}</nav>
-          <h1 className="display mt-6 max-w-[16ch] text-[clamp(48px,8.4vw,124px)]">{page.h1}</h1>
+          <h1 className="mt-6">
+            <span className="label block text-violet">{page.keyword}</span>
+            <span className="display mt-4 block max-w-[16ch] text-[clamp(48px,8.4vw,124px)]">{page.h1}</span>
+          </h1>
           <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
             <p className="text-[19px] leading-relaxed text-ink-2 lg:col-span-7">{page.intro}</p>
             <div className="rounded-[20px] border border-ink bg-blaze p-6 lg:col-span-4 lg:col-start-9">
@@ -30,6 +33,13 @@ export default function ServiceDetail() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="wrap pb-6">
+        <div className="grid gap-4 rounded-[20px] border border-ink/15 bg-paper-2 p-6 sm:grid-cols-[auto_1fr] sm:gap-8 sm:p-8">
+          <p className="label pt-1 text-mute">In short</p>
+          <p className="text-[17px] leading-relaxed text-ink">{page.answer}</p>
         </div>
       </section>
 
@@ -105,6 +115,20 @@ export default function ServiceDetail() {
       <section className="wrap sec-sm">
         <h2 className="display text-[clamp(36px,4.6vw,64px)]">Questions</h2>
         <div className="mt-8"><Faq items={page.faqs} /></div>
+      </section>
+
+      <section className="wrap sec-sm">
+        <h2 className="label text-mute">Related services</h2>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+          {page.related.map(r => SERVICE_PAGES.find(p => p.slug === r)).filter(Boolean).map(r => (
+            <li key={r!.slug}>
+              <Link to={`/services/${r!.slug}`} className="group flex h-full items-center justify-between gap-4 rounded-[18px] border border-ink p-5 transition-colors hover:bg-ink hover:text-paper">
+                <span><span className="display block text-[22px] tracking-[-0.02em]">{r!.title}</span><span className="mt-1 block font-mono text-[12px] text-mute group-hover:text-paper/60">from {r!.from}</span></span>
+                <Arrow />
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <CtaBand title={`Let's talk ${page.short.toLowerCase()}.`} />

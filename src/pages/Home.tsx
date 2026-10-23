@@ -33,8 +33,9 @@ export default function Home() {
         <div className="wrap relative grid gap-14 pb-20 sm:pb-28 lg:grid-cols-12 lg:gap-8">
           <div className="hero-in lg:col-span-7">
             <HeroBadge />
-            <h1 className="display mt-8 text-[clamp(60px,10.4vw,156px)] sm:mt-10">
-              Build it.<br /><span className="text-violet">Brand it.</span><br /><span className="relative inline-block">Grow it.<svg viewBox="0 0 300 20" className="absolute -bottom-2 left-0 h-4 w-full text-blaze" preserveAspectRatio="none" aria-hidden><path d="M2 14 C 80 2, 200 2, 298 12" stroke="currentColor" strokeWidth="6" fill="none" strokeLinecap="round" /></svg></span>
+            <h1 className="mt-8 sm:mt-10">
+              <span className="label block text-mute">Website, Shopify &amp; app development company in Delhi</span>
+              <span className="display mt-5 block text-[clamp(60px,10.4vw,156px)]">Build it.<br /><span className="text-violet">Brand it.</span><br /><span className="relative inline-block">Grow it.<svg viewBox="0 0 300 20" className="absolute -bottom-2 left-0 h-4 w-full text-blaze" preserveAspectRatio="none" aria-hidden><path d="M2 14 C 80 2, 200 2, 298 12" stroke="currentColor" strokeWidth="6" fill="none" strokeLinecap="round" /></svg></span></span>
             </h1>
             <p className="display mt-8 min-h-[2.3em] text-[clamp(24px,2.6vw,36px)] leading-[1.15] tracking-[-0.025em] sm:min-h-[1.2em]">
               We make <Typewriter phrases={PHRASES} className="block text-violet sm:inline" />

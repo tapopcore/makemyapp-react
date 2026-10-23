@@ -54,7 +54,7 @@ export const SERVICES: Service[] = [
     blurb: "Custom iPhone apps built to Apple's standards, from design to App Store approval." },
   { name: "Internal Software", pillar: "Build", price: 99999, slug: "app-development",
     blurb: "CRMs, ERPs, dashboards and tools that fix your everyday business problems. Reliable and made for how your team works." },
-  { name: "UI/UX Design", pillar: "Build", price: 49999,
+  { name: "UI/UX Design", pillar: "Build", price: 49999, slug: "ui-ux-design",
     blurb: "Interfaces that feel simple and clear. Wireframes, user flows, prototypes and final screens for web and mobile." },
 
   // Brand
@@ -248,119 +248,186 @@ export const STACK = ["React", "Next.js", "Node.js", "Express", "Python", "Larav
 export interface ServicePage {
   slug: string;
   short: string;
-  title: string;
+  title: string;        // page title for Google (brand is added after it)
+  keyword: string;      // the search phrase this page is built around, shown as the small line in the H1
   h1: string;
   intro: string;
+  answer: string;       // short, direct summary that Google and AI assistants can quote
   from: string;
+  minPrice: number;
   forWho: string[];
   includes: string[];
   workTypes: WorkType[];
+  related: string[];
   faqs: { q: string; a: string }[];
   metaDescription: string;
 }
+
+const AREAS = "Delhi, Gurugram, Noida and the rest of India";
 
 export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: "shopify-development",
     short: "Shopify stores",
-    title: "Shopify Store Development in Delhi",
+    title: "Shopify Development Company in Delhi, India",
+    keyword: "Shopify development company in Delhi",
     h1: "Shopify stores that are ready to sell.",
     intro: "We build Shopify stores for Indian D2C brands across fashion, beauty, nutrition, gifting and home. Fast, mobile-first stores with clean product pages and a checkout that doesn't leak customers.",
+    answer: `MakeMyApp is a Shopify development company in Delhi that designs, builds and sets up Shopify stores for D2C brands. A store starts at ${inr(45999)} and includes a custom theme, product setup, payments, shipping, COD and GST setup, speed work and training. We work with brands in ${AREAS}.`,
     from: inr(45999),
+    minPrice: 45999,
     forWho: ["D2C brands launching their first store", "Brands moving off a slow or outdated theme", "Marketplace sellers who want their own channel", "Stores that get traffic but don't convert"],
     includes: ["Custom theme design matched to your brand", "Product, collection and catalogue setup", "Payments, shipping, COD and GST setup", "Apps for reviews, WhatsApp, upsells and subscriptions", "Speed and mobile optimisation", "SEO basics: titles, URLs, structured data", "Training so your team can run it", "Post-launch support"],
     workTypes: ["Shopify"],
+    related: ["branding", "performance-marketing", "ai-automation"],
     faqs: [
-      { q: "How much does a Shopify store cost?", a: `Our Shopify packages start at ${inr(45999)}. The final price depends on the number of products, custom features and apps. You get a fixed quote after the first call.` },
+      { q: "How much does a Shopify store cost in India?", a: `Our Shopify packages start at ${inr(45999)}. The final price depends on the number of products, custom features and apps. You get a fixed quote after the first call.` },
+      { q: "Is Shopify a good choice for an Indian business?", a: "For most D2C brands, yes. Shopify works in rupees, connects to Indian payment gateways like Razorpay and Cashfree, supports cash on delivery, and links with shipping partners like Shiprocket. You don't have to manage servers or security." },
+      { q: "Shopify or WooCommerce: which should I pick?", a: "Pick Shopify if you want a store that is quick to launch, easy for your team to run and doesn't need server upkeep. A self-hosted option like WooCommerce makes sense only if you need very unusual custom features and have someone to maintain it. We'll tell you honestly which one suits you." },
       { q: "Can you redesign my existing Shopify store?", a: "Yes. We can redesign your theme, clean up apps that slow you down, and improve product pages without losing your orders, customers or SEO." },
+      { q: "Do you build Shopify stores for brands outside Delhi?", a: `Yes. We're based in Delhi and work with brands in ${AREAS} over calls and WhatsApp.` },
       { q: "Do you also run ads for the store?", a: "Yes. We run Meta ads, influencer campaigns and email automation, so the same team that built your store can bring traffic to it." },
     ],
-    metaDescription: "Shopify store development for Indian D2C brands. Custom themes, payments, shipping and speed setup. Starting at ₹45,999.",
+    metaDescription: `Shopify development company in Delhi building fast stores for Indian D2C brands. Theme design, payments, COD, shipping and GST setup. From ${inr(45999)}.`,
   },
   {
     slug: "website-development",
     short: "Websites",
     title: "Website Development Company in Delhi",
+    keyword: "Website development company in Delhi",
     h1: "Websites that look sharp and bring in enquiries.",
     intro: "Business websites, brand sites, platforms and web apps. We design and build sites that load fast, rank on Google and make it easy for visitors to get in touch.",
+    answer: `MakeMyApp is a website development and web design company in Delhi. We design and build business websites, brand sites and web apps that load fast, work well on mobile and bring in enquiries. Business websites start at ${inr(24999)}, with on-page SEO, analytics and post-launch support included.`,
     from: inr(24999),
+    minPrice: 24999,
     forWho: ["Service businesses that need more enquiries", "Professional firms: legal, finance, engineering, healthcare", "Startups launching a product or platform", "Brands whose current site looks dated"],
     includes: ["Design based on your brand", "Mobile-first, fast-loading build", "Content management so you can edit it yourself", "Contact forms, WhatsApp and booking integrations", "On-page SEO and Google Analytics setup", "Hosting and domain setup", "Post-launch support"],
     workTypes: ["Website"],
+    related: ["ui-ux-design", "branding", "ai-automation"],
     faqs: [
-      { q: "How much does a website cost?", a: `Business websites start at ${inr(24999)}. Platforms and web apps with logins, dashboards or payments are quoted after we understand the scope.` },
+      { q: "How much does a website cost in India?", a: `Our business websites start at ${inr(24999)}. Platforms and web apps with logins, dashboards or payments are quoted after we understand the scope.` },
+      { q: "Will my website rank on Google?", a: "We build every site with the basics Google looks for: fast loading, mobile-friendly pages, clean headings, page titles, structured data and a sitemap. Rankings also depend on your content and competition, so we'll be straight with you about what to expect." },
+      { q: "Can you redesign my existing website?", a: "Yes. We redesign dated sites, keep the pages and links that already bring traffic, and move you to a faster build without losing what works." },
       { q: "Will I be able to update the website myself?", a: "Yes. We set up a simple way to edit text, images and pages, and show your team how to use it." },
       { q: "Do you write the content?", a: "We can. We write clear copy for each page, or polish what you already have." },
+      { q: "Do you work with businesses outside Delhi?", a: `Yes. We work with businesses in ${AREAS}.` },
     ],
-    metaDescription: "Website development in Delhi for businesses, professional firms and startups. Fast, mobile-first sites built to bring enquiries. Starting at ₹24,999.",
+    metaDescription: `Website development company in Delhi for businesses, firms and startups. Fast, mobile-first websites built to rank and bring enquiries. From ${inr(24999)}.`,
   },
   {
     slug: "app-development",
     short: "Apps & software",
-    title: "Mobile App & Custom Software Development",
+    title: "Mobile App Development Company in Delhi",
+    keyword: "Mobile app development company in Delhi",
     h1: "Apps and software your customers and team actually use.",
     intro: "Android and iOS apps, SaaS platforms, CRMs, ERPs and internal tools. Built by an in-house team with React Native, Flutter, Node.js and Python.",
+    answer: `MakeMyApp is a mobile app development company in Delhi building Android and iOS apps, SaaS platforms and custom software like CRMs and ERPs. Android apps start at ${inr(100000)}, iOS apps at ${inr(149999)} and custom software at ${inr(99999)}. You own the code, and we handle the Play Store and App Store launch.`,
     from: inr(100000),
+    minPrice: 99999,
     forWho: ["Startups building an MVP", "Businesses replacing spreadsheets with real software", "Brands that need a customer app", "Teams that need a custom CRM or ERP"],
     includes: ["Product planning and user flows", "UI/UX design and clickable prototypes", "Android and iOS apps", "Web dashboards and admin panels", "APIs, payments and third-party integrations", "Cloud hosting on AWS, Google Cloud or Azure", "Play Store and App Store launch", "Maintenance and new features after launch"],
     workTypes: ["App"],
+    related: ["ui-ux-design", "website-development", "ai-automation"],
     faqs: [
-      { q: "How much does an app cost?", a: `Android apps start at ${inr(100000)} and iOS apps at ${inr(149999)}. Custom software starts at ${inr(99999)}. The final price depends on features, platforms and integrations. We often suggest a smaller first version to launch faster.` },
-      { q: "Android, iOS or both?", a: "Usually both, from one codebase with React Native or Flutter. It costs less and ships faster than two separate apps." },
+      { q: "How much does it cost to make an app in India?", a: `With us, Android apps start at ${inr(100000)} and iOS apps at ${inr(149999)}. Custom software starts at ${inr(99999)}. The final price depends on features, platforms and integrations. We often suggest a smaller first version to launch faster.` },
+      { q: "Why does an iOS app cost more than an Android app?", a: "Apple has stricter design and review rules, testing runs across more device and OS combinations, and App Store approval takes more back and forth. That extra work is why iOS starts higher." },
+      { q: "Android, iOS or both?", a: "It depends on your users. Many apps are built for both from one codebase with React Native or Flutter, which costs less than two separate apps. We'll suggest what fits your budget." },
+      { q: "Do you build MVPs for startups?", a: "Yes. We help you pick the few features that prove the idea, build them well, and leave room to grow after launch." },
+      { q: "Do you publish the app on the Play Store and App Store?", a: "Yes. Store listing, submission and approval are part of the project." },
       { q: "Who owns the code?", a: "You do. Full code and accounts are handed over once the project is paid for." },
     ],
-    metaDescription: "Mobile app and custom software development: Android, iOS, SaaS, CRM and ERP. In-house team in Delhi. Android from ₹1,00,000, iOS from ₹1,49,999.",
+    metaDescription: `Mobile app development company in Delhi: Android, iOS, SaaS, CRM and ERP. In-house team, you own the code. Android from ${inr(100000)}, iOS from ${inr(149999)}.`,
+  },
+  {
+    slug: "ui-ux-design",
+    short: "UI/UX design",
+    title: "UI/UX Design Agency in Delhi",
+    keyword: "UI/UX design agency in Delhi",
+    h1: "Screens that feel obvious to use.",
+    intro: "Wireframes, user flows, clickable prototypes and final screens for apps, websites and dashboards. Designed in Figma and ready for developers to build.",
+    answer: `MakeMyApp is a UI/UX design agency in Delhi. We design user flows, wireframes, clickable prototypes and final screens for mobile apps, websites, SaaS products and dashboards, all in Figma and ready to build. UI/UX projects start at ${inr(49999)}.`,
+    from: inr(49999),
+    minPrice: 49999,
+    forWho: ["Startups that need an app or SaaS designed before building", "Products where users get lost or drop off", "Teams with developers but no designer", "Founders preparing a prototype for investors"],
+    includes: ["Research into your users and competitors", "User flows and information architecture", "Wireframes for every key screen", "Clickable prototypes you can test", "Final UI for web and mobile", "Design system with reusable components", "Developer handoff in Figma"],
+    workTypes: ["App", "Website"],
+    related: ["app-development", "website-development", "branding"],
+    faqs: [
+      { q: "How much does UI/UX design cost?", a: `Our UI/UX design projects start at ${inr(49999)}. The price depends on the number of screens, platforms and how much research is needed.` },
+      { q: "What's the difference between UI and UX?", a: "UX is how the product works: the steps, the flow and how easy it is to get things done. UI is how it looks: layout, colours, type and buttons. We do both together." },
+      { q: "Which tool do you design in?", a: "Figma. You get the full file, a clickable prototype and a handoff your developers can build from." },
+      { q: "Can you also build what you design?", a: "Yes. Our in-house developers can build the app or website, so nothing gets lost between design and code." },
+    ],
+    metaDescription: `UI/UX design agency in Delhi for apps, websites, SaaS and dashboards. User flows, wireframes, prototypes and final screens in Figma. From ${inr(49999)}.`,
   },
   {
     slug: "branding",
     short: "Branding",
     title: "Branding & Logo Design Agency in Delhi",
+    keyword: "Branding and logo design agency in Delhi",
     h1: "A brand people remember and trust.",
     intro: "Logo, identity, packaging, social media look and everything printed. We build brands that look premium and stay consistent everywhere they show up.",
+    answer: `MakeMyApp is a branding and logo design agency in Delhi. We create logos, brand identities, guidelines, packaging, catalogues and print for new and growing brands. Full brand identity starts at ${inr(24999)} and packaging design at ${inr(5999)}.`,
     from: inr(24999),
+    minPrice: 24999,
     forWho: ["New brands before launch", "Businesses that have outgrown their logo", "D2C brands that need packaging", "Companies preparing for investors or big clients"],
     includes: ["Logo design and brand identity", "Colours, type and brand guidelines", "Naming and tagline", "Social media branding", "Stationery and business cards", "Packaging design", "Catalogues, brochures and decks", "Outdoor and print graphics"],
     workTypes: ["Shopify", "Website"],
+    related: ["website-development", "shopify-development", "performance-marketing"],
     faqs: [
-      { q: "How much does branding cost?", a: `Full stack branding starts at ${inr(24999)}. Packaging starts at ${inr(5999)} for one product with three designs.` },
+      { q: "How much does logo design and branding cost?", a: `Full stack branding starts at ${inr(24999)}. Packaging starts at ${inr(5999)} for one product with three designs.` },
+      { q: "What is included in a brand identity?", a: "A logo with its variations, a colour palette, typefaces, and guidelines that show how to use them. Depending on the package, it also covers stationery, social media templates and packaging." },
       { q: "How many logo options do we get?", a: "We present a few clear directions, then refine the one you pick until it's right." },
+      { q: "Do you design packaging?", a: `Yes. Packaging design starts at ${inr(5999)} for one product with three designs.` },
       { q: "Can you also build the website and store?", a: "Yes, and that's where it pays off. The same team carries the brand into your site, store, ads and packaging." },
     ],
-    metaDescription: "Branding and logo design in Delhi: identity, packaging, guidelines, catalogues and print. Starting at ₹24,999.",
+    metaDescription: `Branding and logo design agency in Delhi: logos, brand identity, guidelines, packaging and print. Branding from ${inr(24999)}, packaging from ${inr(5999)}.`,
   },
   {
     slug: "performance-marketing",
     short: "Performance marketing",
-    title: "Performance Marketing & Meta Ads Agency",
+    title: "Performance Marketing & Meta Ads Agency in Delhi",
+    keyword: "Performance marketing agency in Delhi",
     h1: "Ads that are measured in sales, not likes.",
     intro: "Meta ads, influencer campaigns, ad creatives and email automation. We plan, run and report on campaigns for D2C brands and local businesses.",
+    answer: `MakeMyApp is a performance marketing agency in Delhi that runs Facebook and Instagram (Meta) ads for D2C brands and local businesses. We handle strategy, tracking, creatives, influencers and email automation, and report in plain language. Management starts at ${inr(44999)} per month plus ad spend.`,
     from: `${inr(44999)} / month`,
+    minPrice: 44999,
     forWho: ["D2C brands ready to scale beyond organic", "Local businesses that need bookings and walk-ins", "Brands with a store but not enough traffic", "Founders tired of agencies that only send screenshots"],
     includes: ["Meta ads strategy, setup and management", "Pixel, Conversions API and tracking setup", "Ad creatives: graphics, AI ads and UGC", "Audience testing and budget planning", "Influencer marketing", "Email automation for repeat sales", "Monthly reporting in plain language"],
     workTypes: ["Shopify", "Content"],
+    related: ["shopify-development", "branding", "ai-automation"],
     faqs: [
       { q: "What does performance marketing cost?", a: `Ads management starts at ${inr(44999)} per month, plus your ad spend, which goes directly to Meta.` },
+      { q: "Is the ad budget included in your fee?", a: "No. Your ad spend is paid straight to Meta from your own account, so you always see exactly where the money goes." },
       { q: "Do you make the ad creatives too?", a: `Yes. Graphic ad packs start at ${inr(9999)}, AI video ads at ${inr(14999)} and UGC videos at ${inr(7999)}.` },
+      { q: "What will you report on?", a: "The numbers that matter to your business: sales or leads, cost per result, return on ad spend, and what we're changing next. In plain words, every month." },
       { q: "How soon will I see results?", a: "Expect the first few weeks to be testing. We tell you what's working and what's not at every step, and we won't promise numbers we can't back." },
     ],
-    metaDescription: "Performance marketing and Meta ads for D2C brands and local businesses. Creatives, influencers and email automation. From ₹44,999 per month.",
+    metaDescription: `Performance marketing agency in Delhi running Facebook and Instagram ads for D2C brands and local businesses, with creatives and tracking. From ${inr(44999)}/month.`,
   },
   {
     slug: "ai-automation",
     short: "AI & automation",
-    title: "AI Agents, WhatsApp & Email Automation",
+    title: "AI Agents & WhatsApp Automation Company in India",
+    keyword: "AI agent and WhatsApp automation company in India",
     h1: "Let AI handle the repetitive work.",
     intro: "AI agents that answer customers 24x7, WhatsApp flows that reply and follow up instantly, and email journeys that bring buyers back. Custom-built and trained on your business.",
+    answer: `MakeMyApp builds AI agents, WhatsApp automation and email automation for Indian businesses. AI agents answer customers and qualify leads around the clock, WhatsApp flows reply and follow up instantly, and email journeys bring buyers back. Email automation starts at ${inr(7999)}, WhatsApp automation at ${inr(19999)} and custom AI agents at ${inr(34999)}.`,
     from: inr(7999),
+    minPrice: 7999,
     forWho: ["Businesses missing enquiries after hours", "Teams answering the same questions all day", "Stores that want more repeat orders", "Anyone still following up leads by hand"],
     includes: ["AI agents for support, FAQs and lead qualification", "WhatsApp auto-replies, order updates and reminders", "Lead capture into your CRM or sheet", "Email welcome, cart recovery and win-back journeys", "Integration with Shopify, your website and CRM", "Training data setup and testing", "Ongoing tuning after launch"],
     workTypes: ["Shopify", "Website"],
+    related: ["shopify-development", "website-development", "performance-marketing"],
     faqs: [
       { q: "What does automation cost?", a: `Email automation starts at ${inr(7999)}, WhatsApp automation at ${inr(19999)} and custom AI agents at ${inr(34999)}.` },
+      { q: "What can an AI agent do for my business?", a: "Answer common customer questions, share prices and availability, book appointments, qualify leads and pass the right ones to your team, at any hour, on your website or WhatsApp." },
       { q: "Will the AI say wrong things to customers?", a: "We train it on your own information, set clear limits, and hand over to a human when it isn't sure. We test it before it talks to a single customer." },
       { q: "Do I need a WhatsApp Business API account?", a: "For full automation, yes. We set it up for you as part of the project." },
+      { q: "Can it connect to my Shopify store or CRM?", a: "Yes. We connect automations to Shopify, your website forms, Google Sheets or your CRM, so leads and orders flow without copy-pasting." },
     ],
-    metaDescription: "AI agents, WhatsApp automation and email automation for Indian businesses. Reply instantly, follow up automatically. Starting at ₹7,999.",
+    metaDescription: `AI agents, WhatsApp automation and email automation for Indian businesses. Reply instantly, qualify leads and follow up automatically. From ${inr(7999)}.`,
   },
 ];
 
@@ -369,9 +436,11 @@ export const SERVICE_PAGES: ServicePage[] = [
 /* ------------------------------------------------------------------ */
 
 export const FAQS = [
-  { q: "What does MakeMyApp do?", a: "We're a full-stack agency in Delhi. We build websites, Shopify stores, apps and software, design brands and packaging, run performance marketing, and create AI content and automation." },
-  { q: "How much does a project cost?", a: `Every service has a real starting price on our services page, from ${inr(999)} for a basic video edit to ${inr(149999)} for iOS apps. You get a fixed, milestone-based quote after a free call.` },
-  { q: "Do you work with clients outside Delhi?", a: "Yes. Most of our work happens over calls and WhatsApp, with clients across India and abroad." },
+  { q: "What does MakeMyApp do?", a: "MakeMyApp is a full-stack digital agency in Delhi. We build websites, Shopify stores, mobile apps and custom software, design brands, logos and packaging, run performance marketing on Meta, and set up AI agents and WhatsApp automation." },
+  { q: "How much does a project cost?", a: `Every service has a real starting price on our services page: websites from ${inr(24999)}, Shopify stores from ${inr(45999)}, branding from ${inr(24999)}, Android apps from ${inr(100000)} and iOS apps from ${inr(149999)}. You get a fixed, milestone-based quote after a free call.` },
+  { q: "Where is MakeMyApp located?", a: `Our office is at ${SITE.address}. We're open ${SITE.hours}.` },
+  { q: "Do you work with clients outside Delhi?", a: "Yes. We work with businesses across Delhi NCR, including Gurugram, Noida, Faridabad and Ghaziabad, and with clients across India and abroad over calls and WhatsApp." },
+  { q: "Is your team in-house?", a: "Yes. Designers, developers and marketers work together in our Delhi office, so your website, store, app, brand and ads are handled by one team." },
   { q: "Do you offer support after launch?", a: "Yes. We provide maintenance, updates, bug fixes and growth support after your project goes live." },
   { q: "How do we start?", a: "Book a free 30 minute call or message us on WhatsApp. We'll understand what you need and tell you honestly what will work." },
 ];
@@ -379,15 +448,15 @@ export const FAQS = [
 export interface PageMeta { title: string; description: string; }
 
 export const META: Record<string, PageMeta> = {
-  "/": { title: "MakeMyApp | Websites, Shopify, Apps, Branding & Ads Agency in Delhi",
-    description: "Full-stack agency in Delhi. We build websites, Shopify stores and apps, design brands, run Meta ads and set up AI automation. 300+ projects delivered. Real starting prices." },
-  "/services": { title: "Services & Starting Prices | MakeMyApp",
-    description: "20 services with real starting prices: websites from ₹24,999, Shopify from ₹45,999, branding from ₹24,999, Android apps from ₹1,00,000, iOS apps from ₹1,49,999, AI automation, ads and content." },
-  "/work": { title: "Our Work: Websites, Shopify Stores & Apps | MakeMyApp",
-    description: "Selected work from 300+ projects: websites, Shopify stores and apps built by MakeMyApp for Athlab, DM Associates, Gossip Confetti, Wedhaven, Deciwood and more." },
+  "/": { title: "Website, Shopify & App Development Company in Delhi | MakeMyApp",
+    description: "Full-stack agency in Delhi for website development, Shopify stores, mobile apps, branding, Meta ads and AI automation. 300+ projects, real starting prices." },
+  "/services": { title: "Services & Prices: Websites, Shopify, Apps, Branding | MakeMyApp",
+    description: "Real starting prices: websites from ₹24,999, Shopify from ₹45,999, branding from ₹24,999, Android apps from ₹1,00,000, iOS from ₹1,49,999. 20 services."},
+  "/work": { title: "Portfolio: Websites, Shopify Stores, Apps & Logos | MakeMyApp",
+    description: "Selected work from 300+ projects: websites, Shopify stores, apps and logos by MakeMyApp, Delhi, for Athlab, DM Associates, Gossip Confetti and more." },
   "/about": { title: "About MakeMyApp | Founders, Team & Awards",
     description: "Meet the team behind MakeMyApp, the Delhi agency that also built Qviq. Tech Startup of the Year 2023, Bharat Ke Maharathi Awards." },
-  "/contact": { title: "Contact MakeMyApp | Book a Free Call",
+  "/contact": { title: "Contact MakeMyApp, Netaji Subhash Place, Delhi | Book a Free Call",
     description: "Book a free 30 minute call, WhatsApp +91 92424 24232 or email team@makemyapp.co. Office at ITL Tower, Netaji Subhash Place, Delhi." },
   "/news": { title: "AI News Today: Latest AI Updates for Business | MakeMyApp",
     description: "The AI updates that matter for business, kept short and simple. Daily AI news from the MakeMyApp AI Desk." },

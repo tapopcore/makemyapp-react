@@ -142,7 +142,7 @@ function Footer() {
             <div>
               <p className="label text-paper/50">Services</p>
               <ul className="mt-4 space-y-2.5 text-[15px]">
-                {[["shopify-development", "Shopify stores"], ["website-development", "Websites"], ["app-development", "Apps & software"], ["branding", "Branding"], ["performance-marketing", "Performance marketing"], ["ai-automation", "AI & automation"]].map(([s, l]) => <li key={s}><Link className="underline-swipe" to={`/services/${s}`}>{l}</Link></li>)}
+                {[["shopify-development", "Shopify stores"], ["website-development", "Websites"], ["app-development", "Mobile apps"], ["ui-ux-design", "UI/UX design"], ["branding", "Branding & logos"], ["performance-marketing", "Performance marketing"], ["ai-automation", "AI & automation"]].map(([s, l]) => <li key={s}><Link className="underline-swipe" to={`/services/${s}`}>{l}</Link></li>)}
               </ul>
             </div>
             <div className="col-span-2 sm:col-span-1">
