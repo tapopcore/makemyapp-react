@@ -1,0 +1,14 @@
+name: shots
+on:
+  push:
+    branches: [tmp-shots]
+jobs:
+  shot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: cd shots && npm i puppeteer@22 --no-save --silent && node shot.cjs
+      - uses: actions/upload-artifact@v4
+        with: { name: shots, path: shots/out }
