@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs"); fs.mkdirSync("out", { recursive: true });
-const sites = [["prayasa", "https://prayasa.in"], ["feeo", "https://feeobeauty.com"]];
+const sites = [["prayasa", "https://prayasa.in"]];
 const clean = async (p) => {
   await p.keyboard.press("Escape").catch(() => {});
   await p.evaluate(() => {
@@ -11,9 +11,9 @@ const clean = async (p) => {
   await p.evaluate(() => {
     for (const el of document.querySelectorAll("body *")) {
       const cs = getComputedStyle(el); if (cs.position !== "fixed" && cs.position !== "sticky") continue;
-      const r = el.getBoundingClientRect(); const isHeader = r.top <= 5 && r.height < 200 && r.width > innerWidth * 0.9;
+      const r = el.getBoundingClientRect(); const isHeader = r.top <= 5 && r.height < 260 && r.width > innerWidth * 0.9 && !/popup|modal|overlay/i.test(el.className + el.id);
       if (isHeader) continue;
-      if (r.width * r.height > 0.02 * innerWidth * innerHeight || /popup|modal|newsletter|cookie|overlay|drawer|chat|whatsapp|klaviyo|privy|wiz/i.test(el.className + el.id)) el.style.setProperty("display", "none", "important");
+      if (r.width * r.height > 0.35 * innerWidth * innerHeight || (r.width < 140 && r.height < 140 && r.bottom > innerHeight - 200) || /popup|modal|newsletter|cookie|overlay|drawer|chat|whatsapp|klaviyo|privy|wiz/i.test(el.className + el.id)) el.style.setProperty("display", "none", "important");
     }
     document.documentElement.style.overflow = "auto"; document.body.style.overflow = "auto";
     document.body.classList.remove("overflow-hidden");
