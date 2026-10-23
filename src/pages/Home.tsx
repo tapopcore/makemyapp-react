@@ -111,7 +111,7 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
-          <BrandSnippet className="mt-24 border-t border-ink/15 pt-14" />
+          <BrandSnippet className="mt-12 border-t border-ink/15 pt-10 sm:mt-20 sm:pt-14" />
           <div className="mt-16 flex justify-center"><Link to="/work" className="btn-ink">See more of our work <Arrow /></Link></div>
         </div>
       </section>
