@@ -108,3 +108,35 @@ body::before {
 }
 /* Without JS (crawlers, previews) everything stays visible */
 .no-js .reveal { opacity: 1; }
+
+/* ---------- brand wall ---------- */
+.brand-tile { perspective: 900px; --mx: 50%; --my: 50%; --rx: 0deg; --ry: 0deg; }
+.brand-face {
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s;
+  clip-path: inset(100% 0 0 0 round 22px);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .06);
+}
+.brand-tile.is-in .brand-face { animation: brand-wipe 1s cubic-bezier(.7,0,.2,1) var(--d) forwards; }
+@keyframes brand-wipe { to { clip-path: inset(0 0 0 0 round 22px); } }
+.brand-logo { opacity: 0; transform: translateY(18px) scale(.94); transition: transform .7s cubic-bezier(.2,.8,.2,1), filter .5s; }
+.brand-tile.is-in .brand-logo { animation: brand-logo .9s cubic-bezier(.2,.8,.2,1) calc(var(--d) + .45s) forwards; }
+@keyframes brand-logo { to { opacity: 1; transform: none; } }
+.brand-light {
+  opacity: 0; transition: opacity .4s; mix-blend-mode: soft-light;
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgb(255 255 255 / .75), transparent 55%);
+}
+.brand-tag { transform: translateY(calc(100% + 16px)); opacity: 0; transition: transform .5s cubic-bezier(.2,.9,.25,1.1), opacity .3s; }
+.brand-dot { transition: transform .35s cubic-bezier(.2,.9,.25,1.3); }
+@media (hover: hover) {
+  .brand-tile:hover .brand-face { box-shadow: inset 0 0 0 1px rgb(255 255 255 / .1), 0 30px 60px -20px rgb(0 0 0 / .7); }
+  .brand-tile:hover .brand-light { opacity: 1; }
+  .brand-tile:hover .brand-logo.brand-logo { transform: scale(1.07) translateY(-6px); }
+  .brand-tile:hover .brand-tag { transform: none; opacity: 1; }
+  .brand-tile:hover .brand-dot { transform: scale(1.25); margin-left: 3px; }
+  .brand-tile:hover ~ .brand-tile .brand-logo, .brand-tile:has(~ .brand-tile:hover) .brand-logo { filter: saturate(.6); }
+}
+.brand-tile.is-active .brand-tag { transform: none; opacity: 1; }
+.brand-tile.is-active .brand-logo.brand-logo { transform: scale(1.05) translateY(-8px); }
+@media (prefers-reduced-motion: reduce) { .brand-face { clip-path: none; } .brand-logo { opacity: 1; transform: none; } }
+.no-js .brand-face { clip-path: none; } .no-js .brand-logo { opacity: 1; transform: none; }

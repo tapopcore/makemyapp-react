@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { ALL_WORK, FEATURED, PROCESS, SERVICES, SERVICE_PAGES, SITE, inr, wa } from "../content";
 import { Arrow, ArrowUR, BrowserShot, CtaBand, Faq, Reveal, WaIcon, track } from "../ui";
 import NotFound from "./NotFound";
+import { BrandWall } from "../brands";
 
 export default function ServiceDetail() {
   const { slug } = useParams();
@@ -31,6 +32,8 @@ export default function ServiceDetail() {
           </div>
         </div>
       </section>
+
+      {page.slug === "branding" && <BrandWall />}
 
       {priced.length > 1 && (
         <section className="wrap sec-sm">

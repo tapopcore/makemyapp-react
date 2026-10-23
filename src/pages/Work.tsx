@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FEATURED, MORE_WORK, TESTIMONIALS, type WorkType } from "../content";
+import { BrandWall } from "../brands";
 import { ArrowUR, BrowserShot, CtaBand, PageHero, Reveal } from "../ui";
 
 const FILTERS: ("All" | WorkType)[] = ["All", "Shopify", "Website", "App", "Content"];
@@ -63,6 +64,8 @@ export default function Work() {
           </ul>
         </section>
       )}
+
+      {f === "All" && <BrandWall cta="service" />}
 
       <section className="wrap sec-sm">
         <div className="grid gap-5 lg:grid-cols-3">
