@@ -2,6 +2,9 @@ name: shots
 on:
   push:
     branches: [tmp-shots]
+    paths: [shots/shot.cjs, .github/workflows/shots.yml]
+permissions:
+  contents: write
 jobs:
   shot:
     runs-on: ubuntu-latest
@@ -10,5 +13,6 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: cd shots && npm i puppeteer@22 --no-save --silent && node shot.cjs
-      - uses: actions/upload-artifact@v4
-        with: { name: shots, path: shots/out }
+      - run: |
+          git config user.email bot@makemyapp.co && git config user.name shots
+          git add -f shots/out && git commit -m "[skip ci] shots out" && git push
