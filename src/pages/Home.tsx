@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { AWARDS, FAQS, FEATURED, MORE_WORK, SITE, TESTIMONIALS } from "../content";
+import { BrandSnippet } from "../brands";
 import { Principles, ProcessSteps } from "../sections";
 import { NewsStrip } from "../news";
 import { BrandMarquee, HeroBadge, TileGrid, Typewriter } from "../fx";
@@ -110,6 +111,7 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
+          <BrandSnippet className="mt-24 border-t border-ink/15 pt-14" />
           <div className="mt-16 flex justify-center"><Link to="/work" className="btn-ink">See more of our work <Arrow /></Link></div>
         </div>
       </section>

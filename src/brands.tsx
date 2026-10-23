@@ -6,7 +6,7 @@ export interface Brand {
   name: string;
   sector?: string;
   bg: string;      // tile colour, taken from the brand itself
-  ink: string;     // index number colour
+  ink: string;     // accent from the brand
   swatches: string[];
   span?: string;   // grid placement
   fit?: string;    // box the logo sits in
@@ -33,7 +33,7 @@ export const BRANDS: Brand[] = [
 /* One tile: its own brand colour, a light that follows the cursor, a slight 3D tilt,
    and a label with the palette that slides in. On touch screens the label shows
    while the tile sits in the middle of the screen. */
-function Tile({ b, i, shown }: { b: Brand; i: number; shown: boolean }) {
+function Tile({ b, i, shown, plain }: { b: Brand; i: number; shown: boolean; plain?: boolean }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(false);
 
@@ -62,12 +62,9 @@ function Tile({ b, i, shown }: { b: Brand; i: number; shown: boolean }) {
 
   return (
     <div ref={ref} onPointerMove={move} onPointerLeave={leave}
-      className={`brand-tile group relative ${b.span ?? ""} ${shown ? "is-in" : ""} ${active ? "is-active" : ""}`}
+      className={`brand-tile group relative ${plain ? "" : b.span ?? ""} ${shown ? "is-in" : ""} ${active ? "is-active" : ""}`}
       style={{ "--bg": b.bg, "--d": `${(i % 6) * 70 + Math.floor(i / 6) * 120}ms` } as CSSProperties}>
       <div className="brand-face absolute inset-0 grid place-items-center overflow-hidden rounded-[22px]" style={{ background: b.bg }}>
-        <span className="absolute left-4 top-3.5 font-mono text-[11px] tracking-[.08em] sm:left-5 sm:top-4" style={{ color: b.ink }}>
-          {String(i + 1).padStart(2, "0")}
-        </span>
         <div className={`absolute ${b.fit ?? "inset-x-[16%] top-[17%] bottom-[23%]"}`}>
           <img src={`/img/brands/${b.slug}.webp`} alt={`${b.name} logo`} loading="lazy" decoding="async"
             className="brand-logo size-full object-contain" />
@@ -86,7 +83,9 @@ function Tile({ b, i, shown }: { b: Brand; i: number; shown: boolean }) {
   );
 }
 
-export function BrandWall({ cta = "quote" }: { cta?: "quote" | "service" }) {
+const SNIPPET = ["divya-bajaj", "nail-lobby", "heer-colors", "geeta-saar", "nothing-before-nails", "e-studio", "bezza", "hidden-home"];
+
+function useShown() {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
   useEffect(() => {
@@ -95,6 +94,31 @@ export function BrandWall({ cta = "quote" }: { cta?: "quote" | "service" }) {
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setShown(true); io.disconnect(); } }, { rootMargin: "0px 0px -12% 0px" });
     io.observe(el); return () => io.disconnect();
   }, []);
+  return [ref, shown] as const;
+}
+
+/* Compact version for the home page and the work page: a single even row of logos. */
+export function BrandSnippet({ title = "Brands we've built identities for", className = "" }: { title?: string; className?: string }) {
+  const [ref, shown] = useShown();
+  const list = SNIPPET.map(s => BRANDS.find(b => b.slug === s)!);
+  return (
+    <div className={className}>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="label text-mute">Branding</p>
+          <h3 className="display mt-3 text-[clamp(30px,3.6vw,48px)] tracking-[-0.03em]">{title}</h3>
+        </div>
+        <Link to="/services/branding" className="btn-line !py-3 text-sm">See all branding work <ArrowSmall /></Link>
+      </div>
+      <div ref={ref} className="mt-8 grid auto-rows-[160px] grid-cols-2 gap-2.5 sm:auto-rows-[190px] sm:grid-cols-4 sm:gap-3">
+        {list.map((b, i) => <Tile key={b.slug} b={b} i={i} shown={shown} plain />)}
+      </div>
+    </div>
+  );
+}
+
+export function BrandWall({ cta = "quote" }: { cta?: "quote" | "service" }) {
+  const [ref, shown] = useShown();
 
   return (
     <section className="sec-band bg-ink text-paper">
@@ -117,7 +141,7 @@ export function BrandWall({ cta = "quote" }: { cta?: "quote" | "service" }) {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-paper/15 pt-8">
-          <p className="display text-[clamp(22px,2.4vw,30px)] tracking-[-0.02em]">Your brand could be number {String(BRANDS.length + 1).padStart(2, "0")}.</p>
+          <p className="max-w-xl text-[17px] leading-relaxed text-paper/70">A few of the identities we can show. Many more sit under NDA.</p>
           {cta === "service"
             ? <Link to="/services/branding" className="btn-blaze">See branding packages <ArrowSmall /></Link>
             : <Link to="/contact" className="btn-blaze">Start your identity <ArrowSmall /></Link>}

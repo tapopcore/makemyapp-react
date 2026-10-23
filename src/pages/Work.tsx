@@ -3,7 +3,7 @@ import { FEATURED, MORE_WORK, TESTIMONIALS, type WorkType } from "../content";
 import { BrandWall } from "../brands";
 import { ArrowUR, BrowserShot, CtaBand, PageHero, Reveal } from "../ui";
 
-const FILTERS: ("All" | WorkType)[] = ["All", "Shopify", "Website", "App", "Content"];
+const FILTERS: ("All" | WorkType | "Branding")[] = ["All", "Shopify", "Website", "App", "Branding", "Content"];
 const host = (u: string) => u.replace(/https?:\/\/(www\.)?/, "").replace(/\/.*$/, "");
 
 export default function Work() {
@@ -47,6 +47,8 @@ export default function Work() {
         </section>
       )}
 
+      {(f === "All" || f === "Branding") && <BrandWall cta="service" />}
+
       {rest.length > 0 && (
         <section className="wrap sec-sm">
           <h2 className="label text-mute">{f === "All" ? "More projects" : `More ${f.toLowerCase()} projects`}</h2>
@@ -64,8 +66,6 @@ export default function Work() {
           </ul>
         </section>
       )}
-
-      {f === "All" && <BrandWall cta="service" />}
 
       <section className="wrap sec-sm">
         <div className="grid gap-5 lg:grid-cols-3">
