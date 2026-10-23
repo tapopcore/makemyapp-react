@@ -127,8 +127,8 @@ export const FEATURED: Work[] = [
     line: "Colourful festive fashion store that sells the mood, not just the product." },
   { name: "Qviq", url: "https://qviq.io/", type: "Website", sector: "SaaS", img: "qviq",
     line: "Our own product. A website builder paired with NFC smart cards." },
-  { name: "Regal Plus", url: "https://regalplus.com/", type: "Shopify", sector: "Sweets & snacks", img: "regalplus",
-    line: "Sweets and snacks store with a gift-ready catalogue that ships worldwide." },
+  { name: "Prayasa", url: "https://prayasa.in/", type: "Shopify", sector: "Handcrafted gifting", img: "prayasa",
+    line: "Shopify store for a handcrafted Indian gifting brand, with a gift finder and corporate orders." },
   { name: "Little Thing Studio", url: "https://www.littlethingstudio.com/", type: "Shopify", sector: "Upcycled accessories", img: "littlethingstudio",
     line: "Accessories and bags made from production leftovers, with a crafted look to match." },
   { name: "Laad India", url: "https://laadindia.com/", type: "Shopify", sector: "Kidswear", img: "laadindia",
@@ -138,12 +138,15 @@ export const FEATURED: Work[] = [
   { name: "Kyza India", url: "https://kyzaindia.com/", type: "Shopify", sector: "Jewellery", img: "kyzaindia" },
   { name: "Chapter Skin", url: "https://chapterskin.in/", type: "Shopify", sector: "Lifestyle", img: "chapterskin" },
   { name: "Fleurons", url: "https://fleurons.in/", type: "Shopify", sector: "Cakes & gifting", img: "fleurons" },
-  { name: "Inhunger", url: "https://inhunger.com/", type: "Website", sector: "Food delivery", img: "inhunger" },
+  { name: "FEEO Beauty", url: "https://feeobeauty.com/", type: "Shopify", sector: "Beauty", img: "feeobeauty",
+    line: "Shopify store for a Delhi beauty brand, built around its Smoke X kajal range." },
   { name: "Funkvibes", url: "https://funkvibes.com/", type: "Shopify", sector: "Streetwear", img: "funkvibes" },
   { name: "Akutee", url: "https://akutee.store/", type: "Shopify", sector: "Jewellery", img: "akutee" },
 ];
 
 export const MORE_WORK: Work[] = [
+  { name: "Regal Plus", url: "https://regalplus.com/", type: "Shopify", sector: "Sweets & snacks" },
+  { name: "Inhunger", url: "https://inhunger.com/", type: "Website", sector: "Food delivery" },
   // Shopify
   { name: "Afternote Perfumes", url: "https://afternote.in", type: "Shopify", sector: "Luxury fragrance" },
   { name: "Mukhi Singh Cosmetics", url: "https://mukhisingh.in", type: "Shopify", sector: "Cosmetics" },
@@ -170,7 +173,6 @@ export const MORE_WORK: Work[] = [
   { name: "Indian Hawk", url: "https://indianhawk.in", type: "Website", sector: "Clothing" },
   { name: "Vortex Culture", url: "https://vortexculture.com", type: "Website" },
   { name: "Bezza Beauty", url: "https://bezza.in", type: "Website", sector: "Beauty" },
-  { name: "Feeo SmokeX", url: "https://feeobeauty.com", type: "Website", sector: "Beauty" },
   { name: "Nothing Before Nails", url: "https://nothingbeforenails.com", type: "Website", sector: "Nail studio" },
   { name: "The Nail Lobby", url: "https://thenaillobby.com", type: "Website", sector: "Nail studio" },
   { name: "Divya Bajaj", url: "https://divyabajaj.com", type: "Website", sector: "Astrology platform" },
